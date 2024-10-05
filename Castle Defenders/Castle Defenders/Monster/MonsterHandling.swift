@@ -15,12 +15,21 @@ public class MonsterHandling{
     func CreateMonster(direction: Direction) -> SKSpriteNode{
         let movingFrames = self.loadMonsterMovingFrames(direction: direction)
         // Create your SKSpriteNode (your archer character)
-        let Monster = SKSpriteNode(texture: movingFrames[0])
-        Monster.xScale = MonsterConfig().monsterScale
-        Monster.yScale = MonsterConfig().monsterScale
+        let monster = SKSpriteNode(texture: movingFrames[0])
+        monster.xScale = MonsterConfig().monsterScale
+        monster.yScale = MonsterConfig().monsterScale
         // Animate the archer with the frames at a set speed (0.1 seconds per frame)
-        Monster.run(SKAction.repeatForever(SKAction.animate(with: movingFrames, timePerFrame: MonsterConfig().monsterAnimationSpeed)))
-        return Monster
+        monster.run(SKAction.repeatForever(SKAction.animate(with: movingFrames, timePerFrame: MonsterConfig().monsterAnimationSpeed)))
+        
+        // Set up physics body for the archer
+        monster.physicsBody = SKPhysicsBody(rectangleOf: monster.size)
+        monster.physicsBody?.categoryBitMask = Common.PhysicsCategory.monster
+        monster.physicsBody?.contactTestBitMask = Common.PhysicsCategory.player
+        monster.physicsBody?.collisionBitMask = Common.PhysicsCategory.none // No physical collision, only contact
+        monster.physicsBody?.isDynamic = false // Allow movement if needed
+        monster.physicsBody?.affectedByGravity = false // Since it's a 2D game, gravity is often disabled
+        
+        return monster
     }
     
     func loadMonsterMovingFrames(direction: Direction) -> [SKTexture]{
@@ -91,5 +100,21 @@ public class MonsterHandling{
         
         // Make the monster move to the archer
         monster.run(moveAction)
+    }
+    
+    func MonsterDestroyed(in scene: SKScene,monster: SKSpriteNode){
+        // Create and position the smoke effect
+        if let smokeEffect = SKEmitterNode(fileNamed: "enemy_destroyed.sks") {
+            smokeEffect.position = monster.position
+            scene.addChild(smokeEffect)
+            
+            // Optional: Run a sequence to remove the smoke effect after it dissipates
+            let wait = SKAction.wait(forDuration: 3.0) // Adjust duration as needed
+            let removeSmoke = SKAction.removeFromParent()
+            smokeEffect.run(SKAction.sequence([wait, removeSmoke]))
+        }
+        
+        // Remove the monster from the scene (simulating explosion)
+        monster.removeFromParent()
     }
 }

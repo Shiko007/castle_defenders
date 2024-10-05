@@ -11,12 +11,21 @@ public class PlayerHandling{
     func CreatePlayer() -> SKSpriteNode{
         let idleFrames = self.loadPlayerIdleSFrames()
         // Create your SKSpriteNode (your archer character)
-        let archer = SKSpriteNode(texture: idleFrames[0])
-        archer.xScale = PlayerConfig().playerScale
-        archer.yScale = PlayerConfig().playerScale
+        let player = SKSpriteNode(texture: idleFrames[0])
+        player.xScale = PlayerConfig().playerScale
+        player.yScale = PlayerConfig().playerScale
         // Animate the archer with the frames at a set speed (0.1 seconds per frame)
-        archer.run(SKAction.repeatForever(SKAction.animate(with: idleFrames, timePerFrame: PlayerConfig().idleSAnimationSpeed)))
-        return archer
+        player.run(SKAction.repeatForever(SKAction.animate(with: idleFrames, timePerFrame: PlayerConfig().idleSAnimationSpeed)))
+        
+        // Set up physics body for the archer
+        player.physicsBody = SKPhysicsBody(rectangleOf: player.size)
+        player.physicsBody?.categoryBitMask = Common.PhysicsCategory.player
+        player.physicsBody?.contactTestBitMask = Common.PhysicsCategory.monster
+        player.physicsBody?.collisionBitMask = Common.PhysicsCategory.none // No physical collision, only contact
+        player.physicsBody?.isDynamic = true // Allow movement if needed
+        player.physicsBody?.affectedByGravity = false // Since it's a 2D game, gravity is often disabled
+        
+        return player
     }
     
     func loadPlayerIdleSFrames() -> [SKTexture]{
