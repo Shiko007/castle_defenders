@@ -10,14 +10,21 @@ import GameplayKit
 
 
 class GameScene: SKScene, SKPhysicsContactDelegate {
+    let playerHandler = PlayerHandling()
+    let monsterHandler = MonsterHandling()
+    var sceneLoaded = false
+    var player: PlayerNode?
+    var monsters: [MonsterNode] = []
     
     override func sceneDidLoad() {
-        let player = PlayerHandling().CreatePlayer()
-        var monster = SKSpriteNode()
+        sceneLoaded = true
+        player = playerHandler.CreatePlayer(gameScene: self)
+        var monster : MonsterNode?
         let spawnMonsterAction = SKAction.run {
-            monster = MonsterHandling().spawnMonster()
-            self.addChild(monster)
-            MonsterHandling().moveMonsterToPlayer(monster: monster, player: player)
+            monster = self.monsterHandler.spawnMonster(gameScene: self)
+            self.addChild(monster!)
+            self.monsters.append(monster!)
+            self.monsterHandler.moveMonsterToPlayer(monster: monster!, player: self.player!)
         }
         let waitAction = SKAction.wait(forDuration: MonsterConfig().monsterSpawnSpeed) // Set delay between each monster spawn
         let spawnSequence = SKAction.sequence([spawnMonsterAction, waitAction])
@@ -25,29 +32,29 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
 
         self.physicsWorld.contactDelegate = self
         // Add the archer to the scene
-        self.addChild(player)
         self.run(spawnForever)
+        self.addChild(player!)
     }
     
     // This function gets called when a collision/contact occurs
     func didBegin(_ contact: SKPhysicsContact) {
         // Sort the bodies involved in the collision
-        let firstBody: SKPhysicsBody
-        let secondBody: SKPhysicsBody
-        
-        if contact.bodyA.categoryBitMask < contact.bodyB.categoryBitMask {
-            firstBody = contact.bodyA
-            secondBody = contact.bodyB
-        } else {
-            firstBody = contact.bodyB
-            secondBody = contact.bodyA
+        let collisionHandling = CollisionHandling()
+        collisionHandling.handleCollision(contact: contact)
+    }
+    
+    func removeMonsterFromList(monster: MonsterNode){
+        monsters.removeAll { $0 == monster }
+    }
+    
+    // Update function is called every frame
+    override func update(_ currentTime: TimeInterval) {
+        if !sceneLoaded {
+            return
         }
-        
-        // Check if it's a collision between the archer and a monster
-        if firstBody.categoryBitMask == Common.PhysicsCategory.player && secondBody.categoryBitMask == Common.PhysicsCategory.monster {
-            // Handle what happens on collision (e.g., reduce health, remove monster, etc.)
-            MonsterHandling().MonsterDestroyed(in: self, monster: secondBody.node as! SKSpriteNode)
-        }
+        // Call the update function of the PlayerNode
+        player!.update(currentTime: currentTime, monsters: monsters)
+        // You can update other game logic here as well
     }
     
     func touchDown(atPoint pos : CGPoint) {
@@ -75,11 +82,6 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     }
     
     override func touchesCancelled(_ touches: Set<UITouch>, with event: UIEvent?) {
-        
-    }
-    
-    
-    override func update(_ currentTime: TimeInterval) {
         
     }
 }

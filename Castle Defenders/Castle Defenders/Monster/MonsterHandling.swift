@@ -12,22 +12,15 @@ public class MonsterHandling{
         case left
         case right
     }
-    func CreateMonster(direction: Direction) -> SKSpriteNode{
+    
+    let monsterConfiguration = MonsterConfig()
+    
+    func CreateMonster(gameScene: GameScene,direction: Direction) -> MonsterNode{
         let movingFrames = self.loadMonsterMovingFrames(direction: direction)
-        // Create your SKSpriteNode (your archer character)
-        let monster = SKSpriteNode(texture: movingFrames[0])
-        monster.xScale = MonsterConfig().monsterScale
-        monster.yScale = MonsterConfig().monsterScale
-        // Animate the archer with the frames at a set speed (0.1 seconds per frame)
-        monster.run(SKAction.repeatForever(SKAction.animate(with: movingFrames, timePerFrame: MonsterConfig().monsterAnimationSpeed)))
-        
-        // Set up physics body for the archer
-        monster.physicsBody = SKPhysicsBody(rectangleOf: monster.size)
-        monster.physicsBody?.categoryBitMask = Common.PhysicsCategory.monster
-        monster.physicsBody?.contactTestBitMask = Common.PhysicsCategory.player
-        monster.physicsBody?.collisionBitMask = Common.PhysicsCategory.none // No physical collision, only contact
-        monster.physicsBody?.isDynamic = false // Allow movement if needed
-        monster.physicsBody?.affectedByGravity = false // Since it's a 2D game, gravity is often disabled
+        // Create your Monster
+        let monster = MonsterNode(texture: movingFrames[0], gameScene: gameScene)
+        // Animate with the frames at a set speed (0.1 seconds per frame)
+        monster.run(SKAction.repeatForever(SKAction.animate(with: movingFrames, timePerFrame: monsterConfiguration.monsterAnimationSpeed)))
         
         return monster
     }
@@ -56,7 +49,7 @@ public class MonsterHandling{
         //}
     }
     
-    func spawnMonster() -> SKSpriteNode {
+    func spawnMonster(gameScene: GameScene) -> MonsterNode {
         // Get screen bounds
         let screenWidth = UIScreen.main.bounds.width
         let screenHeight = UIScreen.main.bounds.height
@@ -64,8 +57,7 @@ public class MonsterHandling{
         // Randomly choose an edge (top, bottom, left, right)
         let edge = Int.random(in: 0..<4)
         var position: CGPoint
-        var monster = SKSpriteNode()
-        
+        var monster : MonsterNode?
         switch edge {
         case 0: // Top edge
             position = CGPoint(x: CGFloat.random(in: -screenWidth...screenWidth), y: screenHeight)
@@ -80,15 +72,15 @@ public class MonsterHandling{
         }
         
         if(position.x < 0){
-            monster = self.CreateMonster(direction: .left)
+            monster = self.CreateMonster(gameScene: gameScene,direction: .left)
             // Set monster's initial position
-            monster.position = position
+            monster!.position = position
         }else{
-            monster = self.CreateMonster(direction: .right)
+            monster = self.CreateMonster(gameScene: gameScene,direction: .right)
             // Set monster's initial position
-            monster.position = position
+            monster!.position = position
         }
-        return monster
+        return monster!
     }
     
     func moveMonsterToPlayer(monster: SKSpriteNode,player: SKSpriteNode) {
@@ -100,21 +92,5 @@ public class MonsterHandling{
         
         // Make the monster move to the archer
         monster.run(moveAction)
-    }
-    
-    func MonsterDestroyed(in scene: SKScene,monster: SKSpriteNode){
-        // Create and position the smoke effect
-        if let smokeEffect = SKEmitterNode(fileNamed: "enemy_destroyed.sks") {
-            smokeEffect.position = monster.position
-            scene.addChild(smokeEffect)
-            
-            // Optional: Run a sequence to remove the smoke effect after it dissipates
-            let wait = SKAction.wait(forDuration: 3.0) // Adjust duration as needed
-            let removeSmoke = SKAction.removeFromParent()
-            smokeEffect.run(SKAction.sequence([wait, removeSmoke]))
-        }
-        
-        // Remove the monster from the scene (simulating explosion)
-        monster.removeFromParent()
     }
 }
