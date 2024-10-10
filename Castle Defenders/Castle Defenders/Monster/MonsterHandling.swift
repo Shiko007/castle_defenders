@@ -18,7 +18,7 @@ public class MonsterHandling{
     func CreateMonster(gameScene: GameScene,direction: Direction) -> MonsterNode{
         let movingFrames = self.loadMonsterMovingFrames(direction: direction)
         // Create your Monster
-        let monster = MonsterNode(texture: movingFrames[0],size: CGSize(width: monsterConfiguration.monsterWidth, height: monsterConfiguration.monsterHeight), gameScene: gameScene)
+        let monster = MonsterNode(texture: movingFrames[0], size: CGSize(width: monsterConfiguration.monsterWidth, height: monsterConfiguration.monsterHeight), gameScene: gameScene)
         // Animate with the frames at a set speed (0.1 seconds per frame)
         monster.run(SKAction.repeatForever(SKAction.animate(with: movingFrames, timePerFrame: monsterConfiguration.monsterAnimationSpeed)))
         
@@ -101,5 +101,16 @@ public class MonsterHandling{
 
         // Run the move action on the monster
         monster.run(moveAction)
+    }
+    
+    func createKilledMonstersLabel() -> SKLabelNode {
+        // Create and configure the label
+        let monstersKilledLabel = SKLabelNode(text: monsterConfiguration.killedMonsCounterLabel)
+        monstersKilledLabel.fontName = monsterConfiguration.killedMonsLabelFont
+        monstersKilledLabel.fontSize = monsterConfiguration.killedMonsLabelFontSize
+        monstersKilledLabel.fontColor = monsterConfiguration.killedMonsLabelColor
+        monstersKilledLabel.zPosition = monsterConfiguration.killedMonsLabelZPos // Ensure it's on top of other nodes
+        monstersKilledLabel.position = monsterConfiguration.killedMonsLabelPos
+        return monstersKilledLabel
     }
 }

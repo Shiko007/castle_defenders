@@ -88,6 +88,7 @@ class MonsterNode: SKSpriteNode {
         }
         // Remove the monster from the scene (simulating explosion)
         gameScene?.removeMonsterFromList(monster: self)
+        gameScene?.incrementMonstersKilled()
         self.removeFromParent()
     }
 }

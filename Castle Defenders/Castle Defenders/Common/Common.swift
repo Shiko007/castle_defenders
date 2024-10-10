@@ -5,10 +5,10 @@
 //  Created by Sherif Yasser on 05.10.24.
 //
 
-import Foundation
+import SpriteKit
 
 public class Common {
-
+    let gameSceneBGColor: UIColor = .white
 }
 
 struct PhysicsCategory {

@@ -12,11 +12,15 @@ import GameplayKit
 class GameScene: SKScene, SKPhysicsContactDelegate {
     let playerHandler = PlayerHandling()
     let monsterHandler = MonsterHandling()
+    let commonConfig = Common()
     var sceneLoaded = false
     var player: PlayerNode?
     var monsters: [MonsterNode] = []
+    var monstersKilled: Int = 0
+    var killedCounterLabel : SKLabelNode!
     
     override func sceneDidLoad() {
+        self.backgroundColor = commonConfig.gameSceneBGColor
         sceneLoaded = true
         player = playerHandler.CreatePlayer(gameScene: self)
         var monster : MonsterNode?
@@ -29,11 +33,14 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         let waitAction = SKAction.wait(forDuration: MonsterConfig().monsterSpawnSpeed) // Set delay between each monster spawn
         let spawnSequence = SKAction.sequence([spawnMonsterAction, waitAction])
         let spawnForever = SKAction.repeatForever(spawnSequence)
-
+        
+        killedCounterLabel = monsterHandler.createKilledMonstersLabel()
+        
         self.physicsWorld.contactDelegate = self
         // Add the archer to the scene
         self.run(spawnForever)
         self.addChild(player!)
+        self.addChild(killedCounterLabel)
     }
     
     // This function gets called when a collision/contact occurs
@@ -46,6 +53,12 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     func removeMonsterFromList(monster: MonsterNode){
         monsters.removeAll { $0 == monster }
     }
+    
+    // Function to update the monsters killed counter
+        func incrementMonstersKilled() {
+            monstersKilled += 1
+            killedCounterLabel.text = "\(monstersKilled)"
+        }
     
     // Update function is called every frame
     override func update(_ currentTime: TimeInterval) {
