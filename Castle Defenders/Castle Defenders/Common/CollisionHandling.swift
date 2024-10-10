@@ -23,14 +23,13 @@ class CollisionHandling {
         if firstBody.categoryBitMask == PhysicsCategory.monster && secondBody.categoryBitMask == PhysicsCategory.attack {
             if let monster = firstBody.node as? MonsterNode {
                 monster.takeDamage(amount: 10)
-                firstBody.node?.removeFromParent()  // Remove attack after hit
+                secondBody.node?.removeFromParent()  // Remove attack after hit
             }
         }
 
         // Monster hits Player
         if firstBody.categoryBitMask == PhysicsCategory.monster && secondBody.categoryBitMask == PhysicsCategory.player {
             if let monster = firstBody.node as? MonsterNode {
-                print("Contact")
                 //player.takeDamage(amount: 10)  // Deal damage to player when hit
                 monster.MonsterDestroyed()  // Optional: Remove the monster after hitting the player
             }

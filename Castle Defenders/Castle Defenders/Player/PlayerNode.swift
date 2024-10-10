@@ -9,9 +9,9 @@ import SpriteKit
 
 class PlayerNode: SKSpriteNode {
     let playerConfiguration = PlayerConfig()
-    var attackCooldown: TimeInterval = 1 // Time between attacks
+    var attackCooldown: TimeInterval = 1 // Time between attacks initial value
     var lastAttackTime: TimeInterval = 0 // Track the last attack time
-    var attackRange: CGFloat = 50 // Range within which the player can attack
+    var attackRange: CGFloat = 50 // Range within which the player can attack inital value
     var gameScene: GameScene?
     
     init(texture: SKTexture?, color: UIColor = .clear, size: CGSize = CGSize(width: 50, height: 50), gameScene: GameScene) {
@@ -29,10 +29,36 @@ class PlayerNode: SKSpriteNode {
         self.physicsBody?.collisionBitMask = PhysicsCategory.none // No physical collision, only contact
         self.physicsBody?.isDynamic = true // Allow movement if needed
         self.physicsBody?.affectedByGravity = false // Since it's a 2D game, gravity is often disabled
+        
+        addPlayerRangeCircle()
     }
     
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
+    }
+    
+    func addPlayerRangeCircle() {
+        let player = self
+        let radius: CGFloat = playerConfiguration.attackRange
+        
+        // Create a circular shape node with the given radius
+        let rangeCircle = SKShapeNode(circleOfRadius: radius)
+        
+        // Set the fill color to gray with low opacity
+        rangeCircle.fillColor = UIColor.gray.withAlphaComponent(playerConfiguration.playerRangeColorAlpha)
+        
+        // Optionally, set the stroke color and width (for the circle's border)
+        rangeCircle.strokeColor = playerConfiguration.playerRangeColor
+        rangeCircle.lineWidth = playerConfiguration.playerRangeLineW
+        
+        // Position the circle at the player's position
+        rangeCircle.position = player.position
+        
+        // Ensure the circle is behind the player (optional, adjust zPosition as needed)
+        rangeCircle.zPosition = player.zPosition - 1
+        
+        // Add the circle to the scene (or the player node if you prefer)
+        gameScene!.addChild(rangeCircle)
     }
     
     func update(currentTime: TimeInterval, monsters: [MonsterNode]) {

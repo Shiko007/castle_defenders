@@ -4,12 +4,16 @@
 //
 //  Created by Sherif Yasser on 05.10.24.
 //
-import Foundation
+import SpriteKit
 
 public class PlayerConfig {
     let idleSAnimationSpeed = 0.15
-    let playerScale : CGFloat = 5
-    let attackCD : TimeInterval = 0.5
-    let attackRange : CGFloat = 500
+    let playerWidth : CGFloat = 50
+    let playerHeight : CGFloat = 50
+    let attackCD : TimeInterval = 0.2
+    let attackRange : CGFloat = 200
+    let playerRangeColorAlpha : CGFloat = 0.05
+    let playerRangeColor : UIColor = .lightGray
+    let playerRangeLineW : CGFloat = 1
     //let idleSPlayerAsset = "valla_idle_s_"
 }

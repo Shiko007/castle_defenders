@@ -18,7 +18,7 @@ public class MonsterHandling{
     func CreateMonster(gameScene: GameScene,direction: Direction) -> MonsterNode{
         let movingFrames = self.loadMonsterMovingFrames(direction: direction)
         // Create your Monster
-        let monster = MonsterNode(texture: movingFrames[0], gameScene: gameScene)
+        let monster = MonsterNode(texture: movingFrames[0],size: CGSize(width: monsterConfiguration.monsterWidth, height: monsterConfiguration.monsterHeight), gameScene: gameScene)
         // Animate with the frames at a set speed (0.1 seconds per frame)
         monster.run(SKAction.repeatForever(SKAction.animate(with: movingFrames, timePerFrame: monsterConfiguration.monsterAnimationSpeed)))
         
@@ -83,14 +83,23 @@ public class MonsterHandling{
         return monster!
     }
     
-    func moveMonsterToPlayer(monster: SKSpriteNode,player: SKSpriteNode) {
+    func moveMonsterToPlayer(monster: MonsterNode,player: PlayerNode) {
         // Get the archer's position (assuming archer is placed in the center of the screen)
         let playerPosition = player.position
         
-        // Create a movement action to move towards the archer
-        let moveAction = SKAction.move(to: playerPosition, duration: MonsterConfig().monsterMovmentSpeed) // Adjust the duration as needed
-        
-        // Make the monster move to the archer
+        // Define the fixed movement speed (e.g., 100 points per second)
+        let movementSpeed: CGFloat = 100.0
+
+        // Calculate the distance between the monster and the player
+        let distance = hypot(monster.position.x - playerPosition.x, monster.position.y - playerPosition.y)
+
+        // Calculate the time it will take to cover the distance at the given speed
+        let duration = distance / movementSpeed
+
+        // Create the move action to the player's position
+        let moveAction = SKAction.move(to: playerPosition, duration: TimeInterval(duration))
+
+        // Run the move action on the monster
         monster.run(moveAction)
     }
 }
