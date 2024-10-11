@@ -8,11 +8,13 @@
 import SpriteKit
 
 public class MonsterConfig {
+    //Monster Config
     let monsterAnimationSpeed : CGFloat = 0.15
     let monsterWidth : CGFloat = 50
     let monsterHeight : CGFloat = 50
-    let monsterMovmentSpeed : CGFloat = 100.0
-    let monsterSpawnSpeed : CGFloat = 1
+    let monsterMovmentSpeed : CGFloat = 50.0
+    let monsterSpawnSpeed : CGFloat = 0.5
+    let monsterMaxHealth : Int = 50
     
     //Health Bar Config
     let healthbarDistanceFromMonster : CGFloat = 20

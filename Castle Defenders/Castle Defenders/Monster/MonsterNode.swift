@@ -9,8 +9,9 @@ import SpriteKit
 
 class MonsterNode: SKSpriteNode {
     let monsterConfiguration = MonsterConfig()
-    var maxHealth: Int = 40
-    var health: Int = 40
+    var monsterSpeed : CGFloat!
+    var maxHealth: Int!
+    var health: Int!
     var id: UUID = UUID()
     var gameScene: GameScene?
     var healthBar: SKSpriteNode!
@@ -24,11 +25,13 @@ class MonsterNode: SKSpriteNode {
         self.physicsBody = SKPhysicsBody(rectangleOf: size)
         self.physicsBody?.categoryBitMask = PhysicsCategory.monster
         // Detect collisions with both attacks and the player
-        self.physicsBody?.contactTestBitMask = PhysicsCategory.attack | PhysicsCategory.player
+        self.physicsBody?.contactTestBitMask = PhysicsCategory.player
         self.physicsBody?.collisionBitMask = PhysicsCategory.none
         self.physicsBody?.isDynamic = true
         self.physicsBody?.affectedByGravity = false
-        
+        self.maxHealth = monsterConfiguration.monsterMaxHealth
+        self.health = maxHealth
+        self.monsterSpeed = monsterConfiguration.monsterMovmentSpeed
         // Create the health bar
         createHealthBar()
     }
@@ -86,7 +89,7 @@ class MonsterNode: SKSpriteNode {
             let removeSmoke = SKAction.removeFromParent()
             smokeEffect.run(SKAction.sequence([wait, removeSmoke]))
         }
-        // Remove the monster from the scene (simulating explosion)
+        // Remove the monster from the scene
         gameScene?.removeMonsterFromList(monster: self)
         gameScene?.incrementMonstersKilled()
         self.removeFromParent()

@@ -67,6 +67,12 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         }
         // Call the update function of the PlayerNode
         player!.update(currentTime: currentTime, monsters: monsters)
+        for node in self.children {
+            if node is AttackNode {
+                let attackNode = node as! AttackNode
+                attackNode.updateNode()
+            }
+        }
         // You can update other game logic here as well
     }
     

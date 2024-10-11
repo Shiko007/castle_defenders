@@ -88,7 +88,7 @@ public class MonsterHandling{
         let playerPosition = player.position
         
         // Define the fixed movement speed (e.g., 100 points per second)
-        let movementSpeed: CGFloat = 100.0
+        let movementSpeed: CGFloat = monsterConfiguration.monsterMovmentSpeed
 
         // Calculate the distance between the monster and the player
         let distance = hypot(monster.position.x - playerPosition.x, monster.position.y - playerPosition.y)

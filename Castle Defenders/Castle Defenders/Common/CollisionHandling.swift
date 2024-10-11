@@ -19,14 +19,7 @@ class CollisionHandling {
             firstBody = contact.bodyB
             secondBody = contact.bodyA
         }
-        // Attack hits Monster
-        if firstBody.categoryBitMask == PhysicsCategory.monster && secondBody.categoryBitMask == PhysicsCategory.attack {
-            if let monster = firstBody.node as? MonsterNode {
-                monster.takeDamage(amount: 10)
-                secondBody.node?.removeFromParent()  // Remove attack after hit
-            }
-        }
-
+        
         // Monster hits Player
         if firstBody.categoryBitMask == PhysicsCategory.monster && secondBody.categoryBitMask == PhysicsCategory.player {
             if let monster = firstBody.node as? MonsterNode {

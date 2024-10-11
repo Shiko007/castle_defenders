@@ -63,22 +63,28 @@ class PlayerNode: SKSpriteNode {
     
     func update(currentTime: TimeInterval, monsters: [MonsterNode]) {
         // Find the closest monster within attack range
-        if let closestMonster = findClosestMonster(monsters) {
-            let distance = distanceBetween(player: self, monster: closestMonster)
+        var distance : CGFloat!
+        let sortedMonsters = sortMonsters(monsters)
+        var attackableMonsters : [MonsterNode] = []
+        for monster in sortedMonsters {
+            distance = distanceBetween(player: self, monster: monster)
             
-            if distance <= attackRange && currentTime - lastAttackTime >= attackCooldown {
+            if distance <= attackRange && attackableMonsters.count <= playerConfiguration.attackCount {
                 // Perform attack
-                attack(monster: closestMonster)
-                lastAttackTime = currentTime
+                attackableMonsters.append(monster)
             }
+        }
+        if currentTime - lastAttackTime >= attackCooldown {
+            attack(monsters: attackableMonsters)
+            lastAttackTime = currentTime
         }
     }
     
-    func findClosestMonster(_ monsters: [MonsterNode]) -> MonsterNode? {
+    func sortMonsters(_ monsters: [MonsterNode]) -> [MonsterNode] {
         // Sort monsters by distance and return the closest one
         return monsters.sorted {
             distanceBetween(player: self, monster: $0) < distanceBetween(player: self, monster: $1)
-            }.first
+            }
     }
     
     func distanceBetween(player: PlayerNode, monster: MonsterNode) -> CGFloat {
@@ -87,17 +93,20 @@ class PlayerNode: SKSpriteNode {
         return sqrt(dx*dx + dy*dy)
     }
     
-    func attack(monster: MonsterNode) {
-            // Attack animation (e.g., shoot an arrow)arrow.trianglehead.swap
-        let arrowImage = SKTexture(image: UIImage(systemName: "arrow.trianglehead.swap")!)
-        let arrow = AttackNode(texture:arrowImage)
-        arrow.position = self.position
-        
-        let moveAction = SKAction.move(to: monster.position, duration: 0.5)
-        let removeAction = SKAction.removeFromParent()
-        arrow.run(SKAction.sequence([moveAction, removeAction]))
-        
-        self.parent?.addChild(arrow)
+    func attack(monsters: [MonsterNode]) {
+        //TODO: Handle number of projectiles required to kill a target
+        // Attack animation (e.g., shoot an arrow)
+        let attackImage = SKTexture(image: UIImage(systemName: "arrow.trianglehead.swap")!)
+        for monster in monsters {
+            let attack = AttackNode(texture:attackImage, targetMonster: monster, damage: playerConfiguration.attackDamage)
+            
+            attack.position = self.position
+            let moveAction = SKAction.move(to: monster.position, duration: playerConfiguration.attackProjectileSpeed)
+            let removeAction = SKAction.removeFromParent()
+            attack.run(SKAction.sequence([moveAction, removeAction]))
+            
+            self.parent?.addChild(attack)
+        }
         
         // Apply damage to the monster
         //monster.takeDamage(amount: 10) // Adjust damage amount
