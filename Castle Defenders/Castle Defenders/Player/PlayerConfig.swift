@@ -10,6 +10,8 @@ public class PlayerConfig {
     let idleSAnimationSpeed = 0.15
     let playerWidth : CGFloat = 50
     let playerHeight : CGFloat = 50
+    let playerLevelExperience : Int = 100
+    let playerLevelExpIncrement : Int = 10
     
     //Attack Config
     let attackDamage : Int = 10
@@ -23,5 +25,9 @@ public class PlayerConfig {
     let playerRangeColorAlpha : CGFloat = 0.05
     let playerRangeColor : UIColor = .lightGray
     let playerRangeLineW : CGFloat = 1
-    //let idleSPlayerAsset = "valla_idle_s_"
+    
+    //Exp Config
+    let expBarLineWidth : CGFloat = 5
+    let expBarLineColor : UIColor = .yellow
+    let expBarAlpha : CGFloat = 0.5
 }

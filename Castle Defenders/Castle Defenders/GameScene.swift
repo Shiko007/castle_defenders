@@ -25,7 +25,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         player = playerHandler.CreatePlayer(gameScene: self)
         var monster : MonsterNode?
         let spawnMonsterAction = SKAction.run {
-            monster = self.monsterHandler.spawnMonster(gameScene: self)
+            monster = self.monsterHandler.spawnMonster(gameScene: self, player: self.player!)
             self.addChild(monster!)
             self.monsters.append(monster!)
             self.monsterHandler.moveMonsterToPlayer(monster: monster!, player: self.player!)
@@ -37,7 +37,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         killedCounterLabel = monsterHandler.createKilledMonstersLabel()
         
         self.physicsWorld.contactDelegate = self
-        // Add the archer to the scene
+        // Add the player to the scene
         self.run(spawnForever)
         self.addChild(player!)
         self.addChild(killedCounterLabel)

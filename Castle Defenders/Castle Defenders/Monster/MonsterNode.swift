@@ -15,8 +15,10 @@ class MonsterNode: SKSpriteNode {
     var id: UUID = UUID()
     var gameScene: GameScene?
     var healthBar: SKSpriteNode!
+    var player : PlayerNode!
+    var expWorth : Int!
     
-    init(texture: SKTexture?, color: UIColor = .clear, size: CGSize = CGSize(width: 50, height: 50), gameScene: GameScene) {
+    init(texture: SKTexture?, color: UIColor = .clear, size: CGSize = CGSize(width: 50, height: 50), gameScene: GameScene, player : PlayerNode, expWorth: Int) {
         self.gameScene = gameScene
         // You must call a designated initializer of SKSpriteNode here
         super.init(texture: texture, color: color, size: size)  // Correct designated initializer call
@@ -29,6 +31,8 @@ class MonsterNode: SKSpriteNode {
         self.physicsBody?.collisionBitMask = PhysicsCategory.none
         self.physicsBody?.isDynamic = true
         self.physicsBody?.affectedByGravity = false
+        self.player = player
+        self.expWorth = expWorth
         self.maxHealth = monsterConfiguration.monsterMaxHealth
         self.health = maxHealth
         self.monsterSpeed = monsterConfiguration.monsterMovmentSpeed
@@ -92,6 +96,7 @@ class MonsterNode: SKSpriteNode {
         // Remove the monster from the scene
         gameScene?.removeMonsterFromList(monster: self)
         gameScene?.incrementMonstersKilled()
+        player.gainExperience(points: expWorth)
         self.removeFromParent()
     }
 }

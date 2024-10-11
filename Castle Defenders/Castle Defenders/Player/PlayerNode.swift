@@ -9,10 +9,16 @@ import SpriteKit
 
 class PlayerNode: SKSpriteNode {
     let playerConfiguration = PlayerConfig()
+    var experiencePoints: Int = 0
+    var experienceToNextLevel: Int! // Example: XP required to reach level 2
+    var level: Int = 1
+    var skillPoints: Int = 0
     var attackCooldown: TimeInterval = 1 // Time between attacks initial value
     var lastAttackTime: TimeInterval = 0 // Track the last attack time
     var attackRange: CGFloat = 50 // Range within which the player can attack inital value
     var gameScene: GameScene?
+    private var rangeCircle: SKShapeNode!
+    private var experienceArc: SKShapeNode!
     
     init(texture: SKTexture?, color: UIColor = .clear, size: CGSize = CGSize(width: 50, height: 50), gameScene: GameScene) {
         self.gameScene = gameScene
@@ -21,7 +27,7 @@ class PlayerNode: SKSpriteNode {
         
         self.attackCooldown = playerConfiguration.attackCD
         self.attackRange = playerConfiguration.attackRange
-        
+        self.experienceToNextLevel = playerConfiguration.playerLevelExperience
         // Set up physics body for the player
         self.physicsBody = SKPhysicsBody(rectangleOf: self.size)
         self.physicsBody?.categoryBitMask = PhysicsCategory.player
@@ -31,6 +37,7 @@ class PlayerNode: SKSpriteNode {
         self.physicsBody?.affectedByGravity = false // Since it's a 2D game, gravity is often disabled
         
         addPlayerRangeCircle()
+        drawExperienceArc()
     }
     
     required init?(coder aDecoder: NSCoder) {
@@ -38,27 +45,57 @@ class PlayerNode: SKSpriteNode {
     }
     
     func addPlayerRangeCircle() {
-        let player = self
         let radius: CGFloat = playerConfiguration.attackRange
         
         // Create a circular shape node with the given radius
         let rangeCircle = SKShapeNode(circleOfRadius: radius)
         
         // Set the fill color to gray with low opacity
-        rangeCircle.fillColor = UIColor.gray.withAlphaComponent(playerConfiguration.playerRangeColorAlpha)
+        rangeCircle.fillColor = playerConfiguration.playerRangeColor.withAlphaComponent(playerConfiguration.playerRangeColorAlpha)
         
         // Optionally, set the stroke color and width (for the circle's border)
         rangeCircle.strokeColor = playerConfiguration.playerRangeColor
         rangeCircle.lineWidth = playerConfiguration.playerRangeLineW
-        
         // Position the circle at the player's position
-        rangeCircle.position = player.position
+        rangeCircle.position = self.position
         
         // Ensure the circle is behind the player (optional, adjust zPosition as needed)
-        rangeCircle.zPosition = player.zPosition - 1
+        rangeCircle.zPosition = self.zPosition - 2
         
         // Add the circle to the scene (or the player node if you prefer)
         gameScene!.addChild(rangeCircle)
+    }
+    
+    func drawExperienceArc() {
+        let radius: CGFloat = playerConfiguration.attackRange
+        experienceArc = SKShapeNode(circleOfRadius: radius)
+        experienceArc.strokeColor = playerConfiguration.expBarLineColor
+        experienceArc.lineWidth = playerConfiguration.expBarLineWidth
+        experienceArc.position = self.position
+        experienceArc.alpha = playerConfiguration.expBarAlpha
+        experienceArc.zPosition = self.zPosition - 1
+        experienceArc.lineCap = .round // Smooth line endings
+        
+        // Start with an empty arc
+        experienceArc.path = createArcPath(percentage: 0)
+        gameScene!.addChild(experienceArc)
+    }
+    
+    // Create the arc path based on the experience percentage
+    func createArcPath(percentage: CGFloat) -> CGPath {
+        let radius: CGFloat = playerConfiguration.attackRange
+        let center = CGPoint(x: 0, y: 0)
+        let startAngle = CGFloat(-CGFloat.pi / 2) // Start at the top of the circle
+        let endAngle = startAngle + (2 * CGFloat.pi * percentage / 100)
+        
+        let path = UIBezierPath(arcCenter: center, radius: radius, startAngle: startAngle, endAngle: endAngle, clockwise: true)
+        return path.cgPath
+    }
+    
+    // Call this whenever the player gains experience
+    func updateExperienceProgress() {
+        let experiencePercentage = CGFloat(experiencePoints) / CGFloat(experienceToNextLevel) * 100
+        experienceArc.path = createArcPath(percentage: experiencePercentage)
     }
     
     func update(currentTime: TimeInterval, monsters: [MonsterNode]) {
@@ -70,7 +107,6 @@ class PlayerNode: SKSpriteNode {
             distance = distanceBetween(player: self, monster: monster)
             
             if distance <= attackRange && attackableMonsters.count <= playerConfiguration.attackCount {
-                // Perform attack
                 attackableMonsters.append(monster)
             }
         }
@@ -84,7 +120,7 @@ class PlayerNode: SKSpriteNode {
         // Sort monsters by distance and return the closest one
         return monsters.sorted {
             distanceBetween(player: self, monster: $0) < distanceBetween(player: self, monster: $1)
-            }
+        }
     }
     
     func distanceBetween(player: PlayerNode, monster: MonsterNode) -> CGFloat {
@@ -107,8 +143,26 @@ class PlayerNode: SKSpriteNode {
             
             self.parent?.addChild(attack)
         }
+    }
+    
+    // Function to gain XP
+    func gainExperience(points: Int) {
+        experiencePoints += points
+        updateExperienceProgress()
+        if experiencePoints >= experienceToNextLevel {
+            levelUp()
+        }
+    }
+    
+    // Function to level up
+    func levelUp() {
+        level += 1
+        skillPoints += 1 // Award 1 skill point per level-up (can be adjusted)
         
-        // Apply damage to the monster
-        //monster.takeDamage(amount: 10) // Adjust damage amount
+        // Reset XP and increase the XP threshold for the next level
+        experiencePoints = 0
+        experienceToNextLevel += playerConfiguration.playerLevelExpIncrement // Increase the XP requirement (adjust as needed)
+        //TODO: Implement a level up notification
+        print("Level Up! Current Level: \(level), Skill Points: \(skillPoints)")
     }
 }

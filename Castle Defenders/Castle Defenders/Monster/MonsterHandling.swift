@@ -15,10 +15,10 @@ public class MonsterHandling{
     
     let monsterConfiguration = MonsterConfig()
     
-    func CreateMonster(gameScene: GameScene,direction: Direction) -> MonsterNode{
+    func CreateMonster(gameScene: GameScene,direction: Direction,player: PlayerNode) -> MonsterNode{
         let movingFrames = self.loadMonsterMovingFrames(direction: direction)
         // Create your Monster
-        let monster = MonsterNode(texture: movingFrames[0], size: CGSize(width: monsterConfiguration.monsterWidth, height: monsterConfiguration.monsterHeight), gameScene: gameScene)
+        let monster = MonsterNode(texture: movingFrames[0], size: CGSize(width: monsterConfiguration.monsterWidth, height: monsterConfiguration.monsterHeight), gameScene: gameScene, player: player, expWorth: monsterConfiguration.monsterExpWorth)
         // Animate with the frames at a set speed (0.1 seconds per frame)
         monster.run(SKAction.repeatForever(SKAction.animate(with: movingFrames, timePerFrame: monsterConfiguration.monsterAnimationSpeed)))
         
@@ -49,7 +49,7 @@ public class MonsterHandling{
         //}
     }
     
-    func spawnMonster(gameScene: GameScene) -> MonsterNode {
+    func spawnMonster(gameScene: GameScene, player : PlayerNode) -> MonsterNode {
         // Get screen bounds
         let screenWidth = UIScreen.main.bounds.width
         let screenHeight = UIScreen.main.bounds.height
@@ -72,11 +72,11 @@ public class MonsterHandling{
         }
         
         if(position.x < 0){
-            monster = self.CreateMonster(gameScene: gameScene,direction: .left)
+            monster = self.CreateMonster(gameScene: gameScene,direction: .left,player: player)
             // Set monster's initial position
             monster!.position = position
         }else{
-            monster = self.CreateMonster(gameScene: gameScene,direction: .right)
+            monster = self.CreateMonster(gameScene: gameScene,direction: .right,player: player)
             // Set monster's initial position
             monster!.position = position
         }

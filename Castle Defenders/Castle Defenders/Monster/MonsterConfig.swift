@@ -15,6 +15,7 @@ public class MonsterConfig {
     let monsterMovmentSpeed : CGFloat = 50.0
     let monsterSpawnSpeed : CGFloat = 0.5
     let monsterMaxHealth : Int = 50
+    let monsterExpWorth : Int = 1
     
     //Health Bar Config
     let healthbarDistanceFromMonster : CGFloat = 20
