@@ -14,7 +14,6 @@ public class MonsterHandling{
     }
     
     let monsterConfiguration = MonsterConfig()
-    let common = Common()
     
     func CreateMonster(gameScene: GameScene,direction: Direction,player: PlayerNode) -> MonsterNode{
         let movingFrames = self.loadMonsterMovingFrames(direction: direction)
