@@ -132,7 +132,7 @@ class PlayerNode: SKSpriteNode {
     func attack(monsters: [MonsterNode]) {
         //TODO: Handle number of projectiles required to kill a target
         // Attack animation (e.g., shoot an arrow)
-        let attackImage = SKTexture(image: UIImage(systemName: "arrow.trianglehead.swap")!)
+        let attackImage = SKTexture(image: UIImage(systemName: "circle.fill")!)
         for monster in monsters {
             let attack = AttackNode(texture:attackImage, targetMonster: monster, damage: playerConfiguration.attackDamage)
             

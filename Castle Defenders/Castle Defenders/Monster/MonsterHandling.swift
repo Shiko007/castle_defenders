@@ -14,6 +14,7 @@ public class MonsterHandling{
     }
     
     let monsterConfiguration = MonsterConfig()
+    let common = Common()
     
     func CreateMonster(gameScene: GameScene,direction: Direction,player: PlayerNode) -> MonsterNode{
         let movingFrames = self.loadMonsterMovingFrames(direction: direction)
@@ -40,7 +41,7 @@ public class MonsterHandling{
             let Frames: [SKTexture] = [SKTexture(image: figureStand),SKTexture(image: figureStand2),SKTexture(image: figureStand3)]
             return Frames
         }
-
+        
         // Assuming you have 4 images for the walking animation
         //for i in 1...4 {
         //    let textureName = PlayerConfig().idleSPlayerAsset + String(i)
@@ -89,28 +90,33 @@ public class MonsterHandling{
         
         // Define the fixed movement speed (e.g., 100 points per second)
         let movementSpeed: CGFloat = monsterConfiguration.monsterMovmentSpeed
-
+        
         // Calculate the distance between the monster and the player
         let distance = hypot(monster.position.x - playerPosition.x, monster.position.y - playerPosition.y)
-
+        
         // Calculate the time it will take to cover the distance at the given speed
         let duration = distance / movementSpeed
-
+        
         // Create the move action to the player's position
         let moveAction = SKAction.move(to: playerPosition, duration: TimeInterval(duration))
-
+        
         // Run the move action on the monster
         monster.run(moveAction)
     }
     
-    func createKilledMonstersLabel() -> SKLabelNode {
-        // Create and configure the label
+    func createKilledMonstersLabel(view : SKView, scene : SKScene) -> SKLabelNode {
         let monstersKilledLabel = SKLabelNode(text: monsterConfiguration.killedMonsCounterLabel)
+        
         monstersKilledLabel.fontName = monsterConfiguration.killedMonsLabelFont
         monstersKilledLabel.fontSize = monsterConfiguration.killedMonsLabelFontSize
         monstersKilledLabel.fontColor = monsterConfiguration.killedMonsLabelColor
         monstersKilledLabel.zPosition = monsterConfiguration.killedMonsLabelZPos // Ensure it's on top of other nodes
-        monstersKilledLabel.position = monsterConfiguration.killedMonsLabelPos
+        
+        // Position the label in the top-left corner based on the converted point
+        print(view.bounds)
+        monstersKilledLabel.position = scene.convertPoint(fromView: CGPoint(x: view.bounds.minX + monstersKilledLabel.frame.width * 3 , y: view.bounds.minY + monstersKilledLabel.frame.height * 2))
+        print(monstersKilledLabel.position)
+        //monstersKilledLabel.position = monsterConfiguration.killedMonsLabelPos
         return monstersKilledLabel
     }
 }

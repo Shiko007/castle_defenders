@@ -34,13 +34,10 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         let spawnSequence = SKAction.sequence([spawnMonsterAction, waitAction])
         let spawnForever = SKAction.repeatForever(spawnSequence)
         
-        killedCounterLabel = monsterHandler.createKilledMonstersLabel()
-        
         self.physicsWorld.contactDelegate = self
         // Add the player to the scene
         self.run(spawnForever)
         self.addChild(player!)
-        self.addChild(killedCounterLabel)
     }
     
     // This function gets called when a collision/contact occurs
@@ -55,10 +52,10 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     }
     
     // Function to update the monsters killed counter
-        func incrementMonstersKilled() {
-            monstersKilled += 1
-            killedCounterLabel.text = "\(monstersKilled)"
-        }
+    func incrementMonstersKilled() {
+        monstersKilled += 1
+        killedCounterLabel.text = String(monstersKilled)
+    }
     
     // Update function is called every frame
     override func update(_ currentTime: TimeInterval) {
@@ -74,6 +71,13 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
             }
         }
         // You can update other game logic here as well
+    }
+    
+    override func didMove(to view: SKView) {
+        super.didMove(to: view)
+        
+        killedCounterLabel = monsterHandler.createKilledMonstersLabel(view : view, scene : self)
+        self.addChild(killedCounterLabel)
     }
     
     func touchDown(atPoint pos : CGPoint) {

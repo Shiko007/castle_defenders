@@ -28,6 +28,6 @@ public class PlayerConfig {
     
     //Exp Config
     let expBarLineWidth : CGFloat = 5
-    let expBarLineColor : UIColor = .yellow
-    let expBarAlpha : CGFloat = 0.5
+    let expBarLineColor : UIColor = .brown
+    let expBarAlpha : CGFloat = 0.9
 }
