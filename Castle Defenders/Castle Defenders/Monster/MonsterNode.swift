@@ -51,14 +51,14 @@ class MonsterNode: SKSpriteNode {
         // Background bar (gray)
         let healthBarBackground = SKSpriteNode(color: monsterConfiguration.healthbarBGColor, size: CGSize(width: barWidth, height: barHeight))
         healthBarBackground.position = CGPoint(x: 0, y: size.height / 2 + monsterConfiguration.healthbarDistanceFromMonster) // Position above the monster
-        healthBarBackground.zPosition = monsterConfiguration.healthbarZPos  // Ensure it's rendered above the monster
+        healthBarBackground.zPosition = elementsZPos.monstersHealthbarZPos  // Ensure it's rendered above the monster
         addChild(healthBarBackground)
         
         // Foreground bar (green)
         healthBar = SKSpriteNode(color: monsterConfiguration.healthbarFGColor, size: CGSize(width: barWidth, height: barHeight))
         healthBar.anchorPoint = CGPoint(x: 0.0, y: 0.5)  // Anchor on the right side (x = 1)
         healthBar.position = CGPoint(x: -barWidth / 2, y: 0)  // Set the position to match the right side of the background
-        healthBar.zPosition = monsterConfiguration.healthbarFGZPos  // Above the background
+        healthBar.zPosition = elementsZPos.monstersHealthbarFGZPos  // Above the background
         healthBarBackground.addChild(healthBar)
     }
     

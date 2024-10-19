@@ -109,7 +109,7 @@ public class MonsterHandling{
         monstersKilledLabel.fontName = monsterConfiguration.killedMonsLabelFont
         monstersKilledLabel.fontSize = monsterConfiguration.killedMonsLabelFontSize
         monstersKilledLabel.fontColor = monsterConfiguration.killedMonsLabelColor
-        monstersKilledLabel.zPosition = monsterConfiguration.killedMonsLabelZPos // Ensure it's on top of other nodes
+        monstersKilledLabel.zPosition = elementsZPos.monstersKilledLabel // Ensure it's on top of other nodes
         
         // Position the label in the top-left corner based on the converted point
         monstersKilledLabel.position = scene.convertPoint(fromView: CGPoint(x: view.bounds.minX + monstersKilledLabel.frame.width * 3 , y: view.bounds.maxY - monstersKilledLabel.frame.height * 2))

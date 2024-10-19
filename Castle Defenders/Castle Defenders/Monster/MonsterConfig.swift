@@ -19,8 +19,6 @@ public class MonsterConfig {
     
     //Health Bar Config
     let healthbarDistanceFromMonster : CGFloat = 20
-    let healthbarZPos : CGFloat = 1
-    let healthbarFGZPos : CGFloat = 2
     let healthbarFGColor : UIColor = .red
     let healthbarBGColor : UIColor = .lightGray
     
@@ -29,6 +27,5 @@ public class MonsterConfig {
     let killedMonsLabelFont : String = "Avenir-Light"
     let killedMonsLabelFontSize : CGFloat = 30
     let killedMonsLabelColor : UIColor = .black
-    let killedMonsLabelZPos : CGFloat = 100
     let killedMonsLabelPos : CGPoint = CGPoint(x: -250 , y: 550)
 }

@@ -58,9 +58,8 @@ class PlayerNode: SKSpriteNode {
         rangeCircle.lineWidth = playerConfiguration.playerRangeLineW
         // Position the circle at the player's position
         rangeCircle.position = self.position
-        
         // Ensure the circle is behind the player (optional, adjust zPosition as needed)
-        rangeCircle.zPosition = self.zPosition - 2
+        rangeCircle.zPosition = elementsZPos.expCircleRange
         
         // Add the circle to the scene (or the player node if you prefer)
         gameScene!.addChild(rangeCircle)
@@ -73,7 +72,7 @@ class PlayerNode: SKSpriteNode {
         experienceArc.lineWidth = playerConfiguration.expBarLineWidth
         experienceArc.position = self.position
         experienceArc.alpha = playerConfiguration.expBarAlpha
-        experienceArc.zPosition = self.zPosition - 1
+        experienceArc.zPosition = elementsZPos.expCircle
         experienceArc.lineCap = .round // Smooth line endings
         
         // Start with an empty arc

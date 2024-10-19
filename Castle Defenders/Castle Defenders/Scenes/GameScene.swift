@@ -12,15 +12,16 @@ import GameplayKit
 class GameScene: SKScene, SKPhysicsContactDelegate {
     let playerHandler = PlayerHandling()
     let monsterHandler = MonsterHandling()
-    let commonConfig = Common()
+    let common = Common()
     var sceneLoaded = false
     var player: PlayerNode?
     var monsters: [MonsterNode] = []
     var monstersKilled: Int = 0
     var killedCounterLabel : SKLabelNode!
+    var subMenu: SKNode!
     
     override func sceneDidLoad() {
-        self.backgroundColor = commonConfig.gameSceneBGColor
+        self.backgroundColor = common.gameSceneBGColor
         sceneLoaded = true
         player = playerHandler.CreatePlayer(gameScene: self)
         var monster : MonsterNode?
@@ -75,9 +76,29 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     
     override func didMove(to view: SKView) {
         super.didMove(to: view)
-        
+        let menuButton = common.createButton(withText: "I", name: "menuButton", size: CGSize(width: 50, height: 50), position: self.convertPoint(fromView: CGPoint(x: view.bounds.minX + 50, y: view.bounds.minY + 50)))
+        subMenu = common.createSubmenu(view: view, scene: self)
         killedCounterLabel = monsterHandler.createKilledMonstersLabel(view : view, scene : self)
+        self.addChild(menuButton)
+        self.addChild(subMenu)
+        subMenu.isHidden = true
         self.addChild(killedCounterLabel)
+    }
+    
+    func toggleSubmenu() {
+            // Show or hide the submenu
+        subMenu.isHidden = !subMenu.isHidden
+    }
+    
+    override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
+        if let touch = touches.first {
+            let location = touch.location(in: self)
+            let touchedNode = self.atPoint(location)
+            if touchedNode.name == "menuButton" {
+                //Display SubMenu
+                toggleSubmenu()
+            }
+        }
     }
     
     func touchDown(atPoint pos : CGPoint) {
@@ -89,10 +110,6 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     }
     
     func touchUp(atPoint pos : CGPoint) {
-        
-    }
-    
-    override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
         
     }
     
