@@ -163,6 +163,15 @@ class PlayerNode: SKSpriteNode {
         experiencePoints = 0
         experienceToNextLevel += playerConfiguration.playerLevelExpIncrement // Increase the XP requirement (adjust as needed)
         //TODO: Implement a level up notification
-        print("Level Up! Current Level: \(level), Skill Points: \(skillPoints)")
+        // Create and position the levelup effect
+        if let levelupEffect = SKEmitterNode(fileNamed: "level_up.sks") {
+            levelupEffect.position = self.position
+            self.parent?.addChild(levelupEffect)
+            
+            // Optional: Run a sequence to remove the smoke effect after it dissipates
+            let wait = SKAction.wait(forDuration: 3.0) // Adjust duration as needed
+            let removeLevelUpEffect = SKAction.removeFromParent()
+            levelupEffect.run(SKAction.sequence([wait, removeLevelUpEffect]))
+        }
     }
 }

@@ -112,9 +112,7 @@ public class MonsterHandling{
         monstersKilledLabel.zPosition = monsterConfiguration.killedMonsLabelZPos // Ensure it's on top of other nodes
         
         // Position the label in the top-left corner based on the converted point
-        print(view.bounds)
-        monstersKilledLabel.position = scene.convertPoint(fromView: CGPoint(x: view.bounds.minX + monstersKilledLabel.frame.width * 3 , y: view.bounds.minY + monstersKilledLabel.frame.height * 2))
-        print(monstersKilledLabel.position)
+        monstersKilledLabel.position = scene.convertPoint(fromView: CGPoint(x: view.bounds.minX + monstersKilledLabel.frame.width * 3 , y: view.bounds.maxY - monstersKilledLabel.frame.height * 2))
         //monstersKilledLabel.position = monsterConfiguration.killedMonsLabelPos
         return monstersKilledLabel
     }
