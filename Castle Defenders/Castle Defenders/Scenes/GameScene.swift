@@ -12,9 +12,10 @@ import GameplayKit
 class GameScene: SKScene, SKPhysicsContactDelegate {
     let playerHandler = PlayerHandling()
     let monsterHandler = MonsterHandling()
+    let goldHandling = GoldHandling()
     let common = Common()
     var sceneLoaded = false
-    var player: PlayerNode?
+    var player: PlayerNode!
     var monsters: [MonsterNode] = []
     var monstersKilled: Int = 0
     var killedCounterLabel : SKLabelNode!
@@ -86,7 +87,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     }
     
     func toggleSubmenu() {
-            // Show or hide the submenu
+        // Show or hide the submenu
         subMenu.isHidden = !subMenu.isHidden
     }
     
@@ -94,9 +95,17 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         if let touch = touches.first {
             let location = touch.location(in: self)
             let touchedNode = self.atPoint(location)
-            if touchedNode.name == "menuButton" {
+            switch touchedNode.name {
+            case "menuButton":
                 //Display SubMenu
                 toggleSubmenu()
+                break
+            case "goldDrop":
+                //Display SubMenu
+                goldHandling.handleGoldCollect(player: player, goldNode: touchedNode as! GoldNode)
+                break
+            default:
+                break
             }
         }
     }

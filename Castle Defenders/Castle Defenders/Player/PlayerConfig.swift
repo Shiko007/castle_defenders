@@ -30,4 +30,7 @@ public class PlayerConfig {
     let expBarLineWidth : CGFloat = 5
     let expBarLineColor : UIColor = .brown
     let expBarAlpha : CGFloat = 0.9
+    
+    //Auto Features
+    let autoCollectGold : Bool = true
 }

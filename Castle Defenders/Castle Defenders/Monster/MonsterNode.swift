@@ -9,11 +9,14 @@ import SpriteKit
 
 class MonsterNode: SKSpriteNode {
     let monsterConfiguration = MonsterConfig()
+    let playerConfiguration = PlayerConfig()
+    let goldHandling = GoldHandling()
     var monsterSpeed : CGFloat!
     var maxHealth: Int!
     var health: Int!
+    var oldHealth: Int!
     var id: UUID = UUID()
-    var gameScene: GameScene?
+    var gameScene: GameScene!
     var healthBar: SKSpriteNode!
     var player : PlayerNode!
     var expWorth : Int!
@@ -31,10 +34,12 @@ class MonsterNode: SKSpriteNode {
         self.physicsBody?.collisionBitMask = PhysicsCategory.none
         self.physicsBody?.isDynamic = true
         self.physicsBody?.affectedByGravity = false
+        self.zPosition = elementsZPos.monsters
         self.player = player
         self.expWorth = expWorth
         self.maxHealth = monsterConfiguration.monsterMaxHealth
         self.health = maxHealth
+        self.oldHealth = health
         self.monsterSpeed = monsterConfiguration.monsterMovmentSpeed
         // Create the health bar
         createHealthBar()
@@ -72,14 +77,15 @@ class MonsterNode: SKSpriteNode {
 
     func takeDamage(amount: Int) {
         health -= amount
-        
         // Update the health bar
         updateHealthBar()
-        
-        if health <= 0 {
-            //Monster is defeated
-            self.MonsterDestroyed()
+        if(oldHealth > 0){
+            if health <= 0 {
+                //Monster is defeated
+                self.MonsterDestroyed()
+            }
         }
+        oldHealth = health
     }
     
     func MonsterDestroyed(){
@@ -87,16 +93,26 @@ class MonsterNode: SKSpriteNode {
         if let smokeEffect = SKEmitterNode(fileNamed: "enemy_destroyed.sks") {
             smokeEffect.position = self.position
             self.parent?.addChild(smokeEffect)
-            
+            smokeEffect.zPosition = elementsZPos.monsterDestroyedEffect
             // Optional: Run a sequence to remove the smoke effect after it dissipates
             let wait = SKAction.wait(forDuration: 3.0) // Adjust duration as needed
             let removeSmoke = SKAction.removeFromParent()
             smokeEffect.run(SKAction.sequence([wait, removeSmoke]))
         }
+        // Generate the gold drop at the monster's location
+        let goldDrop = GoldNode(position: self.position, minValue: 1,maxValue: 10)
+        // Add a removal after a few seconds
+        let goldWait = SKAction.wait(forDuration: 5.0)
+        let goldRemove = SKAction.removeFromParent()
         // Remove the monster from the scene
-        gameScene?.removeMonsterFromList(monster: self)
-        gameScene?.incrementMonstersKilled()
+        gameScene.removeMonsterFromList(monster: self)
+        gameScene.incrementMonstersKilled()
         player.gainExperience(points: expWorth)
+        gameScene.addChild(goldDrop)
+        goldDrop.run(SKAction.sequence([goldWait, goldRemove]))
+        if(playerConfiguration.autoCollectGold == true){
+            goldHandling.handleGoldCollect(player: player, goldNode: goldDrop)
+        }
         self.removeFromParent()
     }
 }

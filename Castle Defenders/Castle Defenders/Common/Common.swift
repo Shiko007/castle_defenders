@@ -67,8 +67,12 @@ public class Common {
 }
 
 struct elementsZPos {
-    static let expCircleRange: CGFloat = -2
-    static let expCircle: CGFloat = -1
+    static let expCircleRange: CGFloat = -3
+    static let expCircle: CGFloat = -2
+    static let monsterDestroyedEffect: CGFloat = -2
+    static let goldDrops: CGFloat = -1
+    static let player: CGFloat = 0
+    static let monsters: CGFloat = 0
     static let monstersHealthbarZPos: CGFloat = 1
     static let monstersHealthbarFGZPos: CGFloat = 2
     static let monstersKilledLabel: CGFloat = 10

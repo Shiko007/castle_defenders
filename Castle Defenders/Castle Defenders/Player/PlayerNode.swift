@@ -16,6 +16,7 @@ class PlayerNode: SKSpriteNode {
     var attackCooldown: TimeInterval = 1 // Time between attacks initial value
     var lastAttackTime: TimeInterval = 0 // Track the last attack time
     var attackRange: CGFloat = 50 // Range within which the player can attack inital value
+    var gold: Int = 0
     var gameScene: GameScene?
     private var rangeCircle: SKShapeNode!
     private var experienceArc: SKShapeNode!
@@ -24,7 +25,7 @@ class PlayerNode: SKSpriteNode {
         self.gameScene = gameScene
         // You must call a designated initializer of SKSpriteNode here
         super.init(texture: texture, color: color, size: size)  // Correct designated initializer call
-        
+        self.zPosition = elementsZPos.player
         self.attackCooldown = playerConfiguration.attackCD
         self.attackRange = playerConfiguration.attackRange
         self.experienceToNextLevel = playerConfiguration.playerLevelExperience
