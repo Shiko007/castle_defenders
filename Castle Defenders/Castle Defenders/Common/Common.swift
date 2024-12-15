@@ -17,8 +17,8 @@ public class Common {
         // Create the background as a shape node with a border
         let buttonBackground = SKShapeNode(rectOf: size, cornerRadius: 10)
         buttonBackground.fillColor = .clear
-        buttonBackground.strokeColor = .black // Border color
-        buttonBackground.lineWidth = 2 // Border thickness
+        buttonBackground.strokeColor = .gray // Border color
+        buttonBackground.lineWidth = 5 // Border thickness
         buttonBackground.name = name
         
         // Create the label
@@ -44,17 +44,21 @@ public class Common {
         
         // Example: Add a few submenu items
         let option1 = self.createButton(withText: "Option 1", name: "subMenu_Op1", size: CGSize(width: 150, height: 50), position: CGPoint(x: 0, y: 120))
+        option1.zPosition = elementsZPos.submenuButton
         
         let option2 = self.createButton(withText: "Option 2", name: "subMenu_Op2", size: CGSize(width: 150, height: 50), position: CGPoint(x: 0, y: 60))
+        option2.zPosition = elementsZPos.submenuButton
         
         let option3 = self.createButton(withText: "Option 3", name: "subMenu_Op3", size: CGSize(width: 150, height: 50), position: CGPoint(x: 0, y: 0))
+        option3.zPosition = elementsZPos.submenuButton
         
         // Create the background as a shape node with a border
         let submenuBackground = SKShapeNode(rectOf: CGSize(width: 200, height: 200), cornerRadius: 10)
         submenuBackground.position = CGPoint(x: 0, y: option1.position.y / 2)
-        submenuBackground.fillColor = .clear
+        submenuBackground.fillColor = .gray
+        submenuBackground.alpha = 0.5
         submenuBackground.strokeColor = .black // Border color
-        submenuBackground.lineWidth = 2 // Border thickness
+        submenuBackground.lineWidth = 5 // Border thickness
         
         submenu.position = scene.convertPoint(fromView: CGPoint(x: view.bounds.maxX / 2, y: (view.bounds.maxY / 2) - 200 ))
         
@@ -78,6 +82,7 @@ struct elementsZPos {
     static let monstersKilledLabel: CGFloat = 10
     static let submenu: CGFloat = 11
     static let menuButton: CGFloat = 11
+    static let submenuButton: CGFloat = 12
 }
 
 struct PhysicsCategory {

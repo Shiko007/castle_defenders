@@ -104,6 +104,15 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
                 //Display SubMenu
                 goldHandling.handleGoldCollect(player: player, goldNode: touchedNode as! GoldNode)
                 break
+            case "subMenu_Op1":
+                //Submenu button pressed
+                print("subMenu_Op1 Pressed")
+            case "subMenu_Op2":
+                //Submenu button pressed
+                print("subMenu_Op2 Pressed")
+            case "subMenu_Op3":
+                //Submenu button pressed
+                print("subMenu_Op3 Pressed")
             default:
                 break
             }
