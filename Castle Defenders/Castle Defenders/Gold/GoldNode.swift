@@ -9,7 +9,7 @@ import SpriteKit
 class GoldNode : SKSpriteNode {
     var amount: Int!
     init(position: CGPoint, minValue : Int, maxValue : Int) {
-        let goldImage = UIImage(systemName: "dollarsign.ring.dashed")!
+        let goldImage = UIImage(systemName: "dollarsign.ring")!
         let texture = SKTexture(image: goldImage)
         let size = CGSize(width: 30, height: 30) 
         amount = Int.random(in: minValue ... maxValue)

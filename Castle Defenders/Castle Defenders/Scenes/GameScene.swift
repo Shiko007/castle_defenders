@@ -13,6 +13,8 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     let playerHandler = PlayerHandling()
     let monsterHandler = MonsterHandling()
     let goldHandling = GoldHandling()
+    let mapsHandling = MapsHandling()
+    let menuHandling = MenuHandling()
     let common = Common()
     var sceneLoaded = false
     var player: PlayerNode!
@@ -20,6 +22,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     var monstersKilled: Int = 0
     var killedCounterLabel : SKLabelNode!
     var subMenu: SKNode!
+    var teleportMenu: SKNode!
     
     override func sceneDidLoad() {
         self.backgroundColor = common.gameSceneBGColor
@@ -78,44 +81,22 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     override func didMove(to view: SKView) {
         super.didMove(to: view)
         let menuButton = common.createButton(withText: "I", name: "menuButton", size: CGSize(width: 50, height: 50), position: self.convertPoint(fromView: CGPoint(x: view.bounds.minX + 50, y: view.bounds.minY + 50)))
-        subMenu = common.createSubmenu(view: view, scene: self)
+        let teleportButton = common.createButton(withText: "O", name: "teleportButton", size: CGSize(width: 50, height: 50), position: self.convertPoint(fromView: CGPoint(x: view.bounds.maxX - 50, y: view.bounds.minY + 50)))
+        teleportMenu = mapsHandling.CreateMapsSubmenu(view: view, scene: self)
+        subMenu = menuHandling.createMenuSubmenu(view: view, scene: self)
         killedCounterLabel = monsterHandler.createKilledMonstersLabel(view : view, scene : self)
         self.addChild(menuButton)
+        self.addChild(teleportButton)
+        self.addChild(teleportMenu)
         self.addChild(subMenu)
+        teleportMenu.isHidden = true
         subMenu.isHidden = true
         self.addChild(killedCounterLabel)
     }
     
-    func toggleSubmenu() {
-        // Show or hide the submenu
-        subMenu.isHidden = !subMenu.isHidden
-    }
-    
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
         if let touch = touches.first {
-            let location = touch.location(in: self)
-            let touchedNode = self.atPoint(location)
-            switch touchedNode.name {
-            case "menuButton":
-                //Display SubMenu
-                toggleSubmenu()
-                break
-            case "goldDrop":
-                //Display SubMenu
-                goldHandling.handleGoldCollect(player: player, goldNode: touchedNode as! GoldNode)
-                break
-            case "subMenu_Op1":
-                //Submenu button pressed
-                print("subMenu_Op1 Pressed")
-            case "subMenu_Op2":
-                //Submenu button pressed
-                print("subMenu_Op2 Pressed")
-            case "subMenu_Op3":
-                //Submenu button pressed
-                print("subMenu_Op3 Pressed")
-            default:
-                break
-            }
+            common.handleTouch(touch: touch, scene: self)
         }
     }
     

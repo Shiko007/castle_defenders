@@ -6,7 +6,7 @@
 //
 import SpriteKit
 
-class GoldHandling {
+public class GoldHandling {
     func handleGoldCollect(player: PlayerNode, goldNode: GoldNode)
     {
         player.gold = player.gold + goldNode.amount

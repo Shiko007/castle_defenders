@@ -37,36 +37,116 @@ public class Common {
         return buttonNode
     }
     
-    func createSubmenu(view: SKView,scene: SKScene) -> SKNode {
+    func createSubmenu(view: SKView, scene: SKScene,
+                       buttons: [(text: String, name: String)],
+                       buttonSize: CGSize = CGSize(width: 150, height: 50),
+                       buttonSeparation: CGFloat = 10) -> SKNode {
         // Create a container node for the submenu
         let submenu = SKNode()
         submenu.zPosition = elementsZPos.submenu
-        
-        // Example: Add a few submenu items
-        let option1 = self.createButton(withText: "Option 1", name: "subMenu_Op1", size: CGSize(width: 150, height: 50), position: CGPoint(x: 0, y: 120))
-        option1.zPosition = elementsZPos.submenuButton
-        
-        let option2 = self.createButton(withText: "Option 2", name: "subMenu_Op2", size: CGSize(width: 150, height: 50), position: CGPoint(x: 0, y: 60))
-        option2.zPosition = elementsZPos.submenuButton
-        
-        let option3 = self.createButton(withText: "Option 3", name: "subMenu_Op3", size: CGSize(width: 150, height: 50), position: CGPoint(x: 0, y: 0))
-        option3.zPosition = elementsZPos.submenuButton
-        
-        // Create the background as a shape node with a border
-        let submenuBackground = SKShapeNode(rectOf: CGSize(width: 200, height: 200), cornerRadius: 10)
-        submenuBackground.position = CGPoint(x: 0, y: option1.position.y / 2)
+
+        // Determine the number of columns and rows
+        let columns = 2
+        let rows = Int(ceil(Double(buttons.count) / Double(columns)))
+
+        // Calculate the total width and height of the submenu
+        let totalWidth = CGFloat(columns) * buttonSize.width + CGFloat(columns - 1) * buttonSeparation
+        let totalHeight = CGFloat(rows) * buttonSize.height + CGFloat(rows - 1) * buttonSeparation
+
+        // Start position for the first button (top-left corner)
+        let startX = -totalWidth / 2 + buttonSize.width / 2
+        let startY = totalHeight / 2 - buttonSize.height / 2
+
+        // Create buttons and add them to the submenu
+        for (index, button) in buttons.enumerated() {
+            let column = index % columns
+            let row = index / columns
+
+            let xPosition = startX + CGFloat(column) * (buttonSize.width + buttonSeparation)
+            let yPosition = startY - CGFloat(row) * (buttonSize.height + buttonSeparation)
+
+            let buttonNode = self.createButton(withText: button.text,
+                                               name: button.name,
+                                               size: buttonSize,
+                                               position: CGPoint(x: xPosition, y: yPosition))
+            buttonNode.zPosition = elementsZPos.submenuButton
+            submenu.addChild(buttonNode)
+        }
+
+        // Create the background dynamically based on the total size
+        let backgroundWidth = totalWidth + 40 // Add padding
+        let backgroundHeight = totalHeight + 40 // Add padding
+        let submenuBackground = SKShapeNode(rectOf: CGSize(width: backgroundWidth, height: backgroundHeight), cornerRadius: 10)
+        submenuBackground.position = CGPoint(x: 0, y: 0)
         submenuBackground.fillColor = .gray
         submenuBackground.alpha = 0.5
         submenuBackground.strokeColor = .black // Border color
         submenuBackground.lineWidth = 5 // Border thickness
-        
-        submenu.position = scene.convertPoint(fromView: CGPoint(x: view.bounds.maxX / 2, y: (view.bounds.maxY / 2) - 200 ))
-        
+        submenuBackground.name = "submenuBackground"
+
+        // Position the submenu in the center of the screen (or offset as needed)
+        submenu.position = scene.convertPoint(fromView: CGPoint(x: view.bounds.midX, y: view.bounds.midY - 200))
+
+        // Add background to the submenu
         submenu.addChild(submenuBackground)
-        submenu.addChild(option1)
-        submenu.addChild(option2)
-        submenu.addChild(option3)
+
         return submenu
+    }
+    
+    func toggleHidden(node : SKNode) {
+        // Show or hide the submenu
+        node.isHidden = !node.isHidden
+    }
+    
+    func handleTouch(touch : UITouch, scene : GameScene) {
+        let location = touch.location(in: scene)
+        let touchedNode = scene.atPoint(location)
+        switch touchedNode.name {
+        case "menuButton":
+            //Display SubMenu
+            scene.teleportMenu.isHidden = true
+            toggleHidden(node: scene.subMenu)
+            break
+        case "teleportButton":
+            //Display SubMenu
+            scene.subMenu.isHidden = true
+            toggleHidden(node: scene.teleportMenu)
+            break
+        case "goldDrop":
+            scene.goldHandling.handleGoldCollect(player: scene.player, goldNode: touchedNode as! GoldNode)
+            break
+        case "teleportMenu_Mine":
+            //Submenu button pressed
+            scene.mapsHandling.handleButtonPress(text: "teleportMenu_Mine")
+            break
+        case "teleportMenu_City":
+            //Submenu button pressed
+            scene.mapsHandling.handleButtonPress(text: "teleportMenu_City")
+            break
+        case "teleportMenu_Island":
+            //Submenu button pressed
+            scene.mapsHandling.handleButtonPress(text: "teleportMenu_Island")
+            break
+        case "subMenu_Op1":
+            //Submenu button pressed
+            scene.menuHandling.handleButtonPress(text: "subMenu_Op1")
+            break
+        case "subMenu_Op2":
+            //Submenu button pressed
+            scene.menuHandling.handleButtonPress(text: "subMenu_Op2")
+            break
+        case "subMenu_Op3":
+            //Submenu button pressed
+            scene.menuHandling.handleButtonPress(text: "subMenu_Op3")
+            break
+        case "submenuBackground":
+            print("Touched submenuBackground")
+            break
+        default:
+            scene.subMenu.isHidden = true
+            scene.teleportMenu.isHidden = true
+            break
+        }
     }
 }
 
