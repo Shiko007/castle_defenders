@@ -22,9 +22,14 @@ public class Common {
         buttonBackground.name = name
         
         // Create the label
-        let label = SKLabelNode(text: text)
-        label.fontSize = 28
-        label.fontColor = .black
+        let label = SKLabelNode()
+        label.attributedText = NSAttributedString(
+                string: text,
+                attributes: [
+                    .font: UIFont.boldSystemFont(ofSize: 28),
+                    .foregroundColor: UIColor.gray
+                ]
+            )
         label.position = CGPoint(x: 0, y: -label.frame.size.height / 2)
         label.name = name
         
