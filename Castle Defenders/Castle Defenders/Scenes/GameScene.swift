@@ -15,14 +15,12 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     let goldHandling = GoldHandling()
     let mapsHandling = MapsHandling()
     let menuHandling = MenuHandling()
+    let uiHandling = UIHandling()
     let common = Common()
     var sceneLoaded = false
     var player: PlayerNode!
     var monsters: [MonsterNode] = []
     var monstersKilled: Int = 0
-    var killedCounterLabel : SKLabelNode!
-    var subMenu: SKNode!
-    var teleportMenu: SKNode!
     
     override func sceneDidLoad() {
         self.backgroundColor = common.gameSceneBGColor
@@ -59,7 +57,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     // Function to update the monsters killed counter
     func incrementMonstersKilled() {
         monstersKilled += 1
-        killedCounterLabel.text = String(monstersKilled)
+        uiHandling.killedCounterLabel.text = String(monstersKilled)
     }
     
     // Update function is called every frame
@@ -80,18 +78,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     
     override func didMove(to view: SKView) {
         super.didMove(to: view)
-        let menuButton = common.createButton(withText: "I", name: "menuButton", size: CGSize(width: 50, height: 50), position: self.convertPoint(fromView: CGPoint(x: view.bounds.minX + 50, y: view.bounds.minY + 50)))
-        let teleportButton = common.createButton(withText: "O", name: "teleportButton", size: CGSize(width: 50, height: 50), position: self.convertPoint(fromView: CGPoint(x: view.bounds.maxX - 50, y: view.bounds.minY + 50)))
-        teleportMenu = mapsHandling.CreateMapsSubmenu(view: view, scene: self)
-        subMenu = menuHandling.createMenuSubmenu(view: view, scene: self)
-        killedCounterLabel = monsterHandler.createKilledMonstersLabel(view : view, scene : self)
-        self.addChild(menuButton)
-        self.addChild(teleportButton)
-        self.addChild(teleportMenu)
-        self.addChild(subMenu)
-        teleportMenu.isHidden = true
-        subMenu.isHidden = true
-        self.addChild(killedCounterLabel)
+        uiHandling.showUI(scene: self, view: view)
     }
     
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {

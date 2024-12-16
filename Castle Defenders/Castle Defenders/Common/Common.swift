@@ -93,24 +93,20 @@ public class Common {
         return submenu
     }
     
-    func toggleHidden(node : SKNode) {
-        // Show or hide the submenu
-        node.isHidden = !node.isHidden
-    }
-    
     func handleTouch(touch : UITouch, scene : GameScene) {
         let location = touch.location(in: scene)
         let touchedNode = scene.atPoint(location)
         switch touchedNode.name {
         case "menuButton":
             //Display SubMenu
-            scene.teleportMenu.isHidden = true
-            toggleHidden(node: scene.subMenu)
+            
+            scene.uiHandling.teleportMenu.isHidden = true
+            scene.uiHandling.toggleHidden(node: scene.uiHandling.subMenu)
             break
         case "teleportButton":
             //Display SubMenu
-            scene.subMenu.isHidden = true
-            toggleHidden(node: scene.teleportMenu)
+            scene.uiHandling.subMenu.isHidden = true
+            scene.uiHandling.toggleHidden(node: scene.uiHandling.teleportMenu)
             break
         case "goldDrop":
             scene.goldHandling.handleGoldCollect(player: scene.player, goldNode: touchedNode as! GoldNode)
@@ -143,8 +139,8 @@ public class Common {
             print("Touched submenuBackground")
             break
         default:
-            scene.subMenu.isHidden = true
-            scene.teleportMenu.isHidden = true
+            scene.uiHandling.subMenu.isHidden = true
+            scene.uiHandling.teleportMenu.isHidden = true
             break
         }
     }
