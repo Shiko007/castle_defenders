@@ -38,6 +38,7 @@ class AttackNode: SKSpriteNode {
     func showDamageFeedback(amount: Int, at monsterPosition: CGPoint, scene: GameScene) {
         // Create the label node
         let damageLabel = SKLabelNode(text: "-\(amount)")
+        damageLabel.zPosition = elementsZPos.damageFBLabel
         damageLabel.fontName = attackConfig.dmgFBFontName
         damageLabel.fontSize = attackConfig.dmgFBLabelTextSize
         damageLabel.fontColor = attackConfig.dmgFBFontColor

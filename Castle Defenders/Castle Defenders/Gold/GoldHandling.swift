@@ -41,6 +41,7 @@ public class GoldHandling {
         // Randomize the starting position within a range above the player's head
         let xOffset = CGFloat.random(in: -20...20) // Random horizontal offset
         let yOffset = CGFloat.random(in: 30...50) // Random vertical range
+        goldLabel.zPosition = elementsZPos.collectedGoldLabel
         goldLabel.fontName = goldConfig.goldFBFontName
         goldLabel.fontSize = goldConfig.goldFBLabelTextSize
         goldLabel.fontColor = goldConfig.goldFBFontColor

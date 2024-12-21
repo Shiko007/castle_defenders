@@ -159,6 +159,8 @@ struct elementsZPos {
     static let monsters: CGFloat = 0
     static let monstersHealthbarZPos: CGFloat = 1
     static let monstersHealthbarFGZPos: CGFloat = 2
+    static let damageFBLabel: CGFloat = 3
+    static let collectedGoldLabel: CGFloat = 4
     static let monstersKilledLabel: CGFloat = 10
     static let goldLabel: CGFloat = 10
     static let submenu: CGFloat = 11
