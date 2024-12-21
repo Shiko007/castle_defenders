@@ -151,7 +151,14 @@ class PlayerNode: SKSpriteNode {
         updateExperienceProgress()
         if experiencePoints >= experienceToNextLevel {
             levelUp()
+            triggerLevelUpVibration()
         }
+    }
+    
+    // Function to execute level up vibration
+    func triggerLevelUpVibration() {
+        let generator = UINotificationFeedbackGenerator()
+        generator.notificationOccurred(.success) // Use .warning for level-up
     }
     
     // Function to level up
