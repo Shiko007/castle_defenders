@@ -11,7 +11,7 @@ import GameplayKit
 
 class GameScene: SKScene, SKPhysicsContactDelegate {
     let playerHandler = PlayerHandling()
-    let monsterHandler = MonsterHandling()
+    let monsterHandling = MonsterHandling()
     let goldHandling = GoldHandling()
     let mapsHandling = MapsHandling()
     let menuHandling = MenuHandling()
@@ -28,10 +28,10 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         player = playerHandler.CreatePlayer(gameScene: self)
         var monster : MonsterNode?
         let spawnMonsterAction = SKAction.run {
-            monster = self.monsterHandler.spawnMonster(gameScene: self, player: self.player!)
+            monster = self.monsterHandling.spawnMonster(gameScene: self, player: self.player!)
             self.addChild(monster!)
             self.monsters.append(monster!)
-            self.monsterHandler.moveMonsterToPlayer(monster: monster!, player: self.player!)
+            self.monsterHandling.moveMonsterToPlayer(monster: monster!, player: self.player!)
         }
         let waitAction = SKAction.wait(forDuration: MonsterConfig().monsterSpawnSpeed) // Set delay between each monster spawn
         let spawnSequence = SKAction.sequence([spawnMonsterAction, waitAction])
@@ -70,7 +70,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         for node in self.children {
             if node is AttackNode {
                 let attackNode = node as! AttackNode
-                attackNode.updateNode()
+                attackNode.updateNode(scene: self)
             }
         }
         // You can update other game logic here as well

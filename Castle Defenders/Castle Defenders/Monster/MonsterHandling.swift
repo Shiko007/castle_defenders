@@ -40,13 +40,6 @@ public class MonsterHandling{
             let Frames: [SKTexture] = [SKTexture(image: figureStand),SKTexture(image: figureStand2),SKTexture(image: figureStand3)]
             return Frames
         }
-        
-        // Assuming you have 4 images for the walking animation
-        //for i in 1...4 {
-        //    let textureName = PlayerConfig().idleSPlayerAsset + String(i)
-        //    let texture = SKTexture(imageNamed: textureName)
-        //    idleFrames.append(texture)
-        //}
     }
     
     func spawnMonster(gameScene: GameScene, player : PlayerNode) -> MonsterNode {

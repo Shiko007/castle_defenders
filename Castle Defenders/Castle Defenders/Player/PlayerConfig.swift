@@ -33,4 +33,8 @@ public class PlayerConfig {
     
     //Auto Features
     let autoCollectGold : Bool = true
+    
+    //HUD Features
+    let showCollectedGold : Bool = true
+    let showAttackDamage : Bool = true
 }

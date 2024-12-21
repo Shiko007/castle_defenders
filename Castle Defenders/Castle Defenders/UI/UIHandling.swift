@@ -9,6 +9,7 @@ import SpriteKit
 
 class UIHandling {
     var killedCounterLabel : SKLabelNode!
+    var goldCounterLabel : SKLabelNode!
     var subMenu: SKNode!
     var teleportMenu: SKNode!
     
@@ -18,12 +19,13 @@ class UIHandling {
         
         teleportMenu = scene.mapsHandling.CreateMapsSubmenu(view: view, scene: scene)
         subMenu = scene.menuHandling.createMenuSubmenu(view: view, scene: scene)
-        killedCounterLabel = scene.monsterHandler.createKilledMonstersLabel(view : view, scene : scene)
-        
+        killedCounterLabel = scene.monsterHandling.createKilledMonstersLabel(view : view, scene : scene)
+        goldCounterLabel = scene.goldHandling.createGoldLabel(view : view, scene : scene)
         teleportMenu.isHidden = true
         subMenu.isHidden = true
         
         scene.addChild(killedCounterLabel)
+        scene.addChild(goldCounterLabel)
         scene.addChild(teleportMenu)
         scene.addChild(subMenu)
         scene.addChild(menuButton)

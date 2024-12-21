@@ -100,7 +100,7 @@ class MonsterNode: SKSpriteNode {
             smokeEffect.run(SKAction.sequence([wait, removeSmoke]))
         }
         // Generate the gold drop at the monster's location
-        let goldDrop = GoldNode(position: self.position, minValue: 1,maxValue: 10)
+        let goldDrop = GoldNode(position: self.position, minValue: 100000,maxValue: 10000000)
         // Add a removal after a few seconds
         let goldWait = SKAction.wait(forDuration: 5.0)
         let goldRemove = SKAction.removeFromParent()
@@ -111,7 +111,7 @@ class MonsterNode: SKSpriteNode {
         gameScene.addChild(goldDrop)
         goldDrop.run(SKAction.sequence([goldWait, goldRemove]))
         if(playerConfiguration.autoCollectGold == true){
-            goldHandling.handleGoldCollect(player: player, goldNode: goldDrop)
+            goldHandling.handleGoldCollect(player: player, goldNode: goldDrop, scene: gameScene)
         }
         self.removeFromParent()
     }

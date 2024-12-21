@@ -114,7 +114,7 @@ public class Common {
             scene.uiHandling.toggleHidden(node: scene.uiHandling.teleportMenu)
             break
         case "goldDrop":
-            scene.goldHandling.handleGoldCollect(player: scene.player, goldNode: touchedNode as! GoldNode)
+            scene.goldHandling.handleGoldCollect(player: scene.player, goldNode: touchedNode as! GoldNode, scene: scene)
             break
         case "teleportMenu_Mine":
             //Submenu button pressed
@@ -141,7 +141,6 @@ public class Common {
             scene.menuHandling.handleButtonPress(text: "subMenu_Op3")
             break
         case "submenuBackground":
-            print("Touched submenuBackground")
             break
         default:
             scene.uiHandling.subMenu.isHidden = true
@@ -161,6 +160,7 @@ struct elementsZPos {
     static let monstersHealthbarZPos: CGFloat = 1
     static let monstersHealthbarFGZPos: CGFloat = 2
     static let monstersKilledLabel: CGFloat = 10
+    static let goldLabel: CGFloat = 10
     static let submenu: CGFloat = 11
     static let menuButton: CGFloat = 11
     static let submenuButton: CGFloat = 12

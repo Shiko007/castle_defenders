@@ -26,6 +26,5 @@ public class MonsterConfig {
     let killedMonsCounterLabel : String = "0"
     let killedMonsLabelFont : String = "Avenir-Light"
     let killedMonsLabelFontSize : CGFloat = 30
-    let killedMonsLabelColor : UIColor = .black
-    let killedMonsLabelPos : CGPoint = CGPoint(x: -250 , y: 550)
+    let killedMonsLabelColor : UIColor = .red
 }
