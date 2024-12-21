@@ -28,7 +28,7 @@ class AttackNode: SKSpriteNode {
 
         if distance < hitThreshold {
             target.takeDamage(amount: damage) // Apply damage
-            if(playerConfiguration.showAttackDamage){
+            if(playerConfiguration.showAttackDamage && target.health >= 0){
                 showDamageFeedback(amount: damage, at: target.position, scene: scene)
             }
             self.removeFromParent() // Remove the projectile after hit
