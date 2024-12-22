@@ -15,6 +15,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     let goldHandling = GoldHandling()
     let mapsHandling = MapsHandling()
     let menuHandling = MenuHandling()
+    let shopHandling = ShopHandling()
     let uiHandling = UIHandling()
     let common = Common()
     var sceneLoaded = false

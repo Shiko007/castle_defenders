@@ -24,11 +24,12 @@ class AttackNode: SKSpriteNode {
 
     func updateNode (scene: GameScene) {
         let distance = hypot(self.position.x - target.position.x, self.position.y - target.position.y)
-        let hitThreshold: CGFloat = playerConfiguration.attackThreashold // Define a distance threshold for hit detection
-
+        let hitThreshold: CGFloat = PlayerConfig.attackThreashold // Define a distance threshold for hit detection
+        //TODO: Fix high speed projectile causing distance issue
         if distance < hitThreshold {
             target.takeDamage(amount: damage) // Apply damage
-            if(playerConfiguration.showAttackDamage && target.health >= 0){
+            //TODO: Handle taget health lower than 0 no feedback is gived
+            if(PlayerConfig.showAttackDamage && target.health >= 0){
                 showDamageFeedback(amount: damage, at: target.position, scene: scene)
             }
             self.removeFromParent() // Remove the projectile after hit

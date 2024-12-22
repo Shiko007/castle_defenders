@@ -13,6 +13,7 @@ class GoldConfig {
     let goldFBFontName : String = "Helvetica-Bold"
     let goldFBFontColor : UIColor = .orange
     
+    
     //Collected Gold Counter Config
     let goldCounterLabel : String = "0"
     let goldLabelFont : String = "Avenir-Light"

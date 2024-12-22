@@ -6,35 +6,38 @@
 //
 import SpriteKit
 
-public class PlayerConfig {
-    let idleSAnimationSpeed = 0.15
-    let playerWidth : CGFloat = 50
-    let playerHeight : CGFloat = 50
-    let playerLevelExperience : Int = 100
-    let playerLevelExpIncrement : Int = 10
+struct PlayerConfig {
+    static let idleSAnimationSpeed = 0.15
+    static let playerWidth : CGFloat = 50
+    static let playerHeight : CGFloat = 50
+    static let playerLevelExperience : Int = 100
+    static let playerLevelExpIncrement : Int = 10
     
     //Attack Config
-    let attackDamage : Int = 10
-    let attackCD : TimeInterval = 0.3
-    let attackProjectileSpeed : CGFloat = 0.5
-    let attackRange : CGFloat = 300
-    let attackCount : Int = 300
-    let attackThreashold : CGFloat = 30
+    static let attackDamage : Int = 10
+    static let attackCD : TimeInterval = 0.5
+    static let attackProjectileSpeed : CGFloat = 0.2
+    static let attackRange : CGFloat = 300
+    static let attackCount : Int = 300
+    static let attackThreashold : CGFloat = 30
     
     //Range Config
-    let playerRangeColorAlpha : CGFloat = 0.05
-    let playerRangeColor : UIColor = .lightGray
-    let playerRangeLineW : CGFloat = 1
+    static let playerRangeColorAlpha : CGFloat = 0.05
+    static let playerRangeColor : UIColor = .lightGray
+    static let playerRangeLineW : CGFloat = 1
     
     //Exp Config
-    let expBarLineWidth : CGFloat = 5
-    let expBarLineColor : UIColor = .brown
-    let expBarAlpha : CGFloat = 0.9
+    static let expBarLineWidth : CGFloat = 5
+    static let expBarLineColor : UIColor = .brown
+    static let expBarAlpha : CGFloat = 0.9
+    
+    //Drops Config
+    static let goldChanceFactor : Int = 0
     
     //Auto Features
-    let autoCollectGold : Bool = true
+    static let autoCollectGold : Bool = true
     
     //HUD Features
-    let showCollectedGold : Bool = true
-    let showAttackDamage : Bool = true
+    static let showCollectedGold : Bool = true
+    static let showAttackDamage : Bool = true
 }

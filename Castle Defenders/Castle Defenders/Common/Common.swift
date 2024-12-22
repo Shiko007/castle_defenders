@@ -106,11 +106,13 @@ public class Common {
             //Display SubMenu
             
             scene.uiHandling.teleportMenu.isHidden = true
+            scene.uiHandling.shopMenu.isHidden = true
             scene.uiHandling.toggleHidden(node: scene.uiHandling.subMenu)
             break
         case "teleportButton":
             //Display SubMenu
             scene.uiHandling.subMenu.isHidden = true
+            scene.uiHandling.shopMenu.isHidden = true
             scene.uiHandling.toggleHidden(node: scene.uiHandling.teleportMenu)
             break
         case "goldDrop":
@@ -128,17 +130,24 @@ public class Common {
             //Submenu button pressed
             scene.mapsHandling.handleButtonPress(text: "teleportMenu_Island")
             break
-        case "subMenu_Op1":
+        case "subMenu_GoldShop":
             //Submenu button pressed
-            scene.menuHandling.handleButtonPress(text: "subMenu_Op1")
+            //Display SubMenu
+            scene.menuHandling.handleButtonPress(text: "subMenu_GoldShop", scene: scene)
+            break
+        case "shop_AttackSpeed":
+            scene.shopHandling.handleButtonPress(text: "shop_AttackSpeed", scene: scene)
+            break
+        case "shop_AttackDamage":
+            scene.shopHandling.handleButtonPress(text: "shop_AttackDamage", scene: scene)
             break
         case "subMenu_Op2":
             //Submenu button pressed
-            scene.menuHandling.handleButtonPress(text: "subMenu_Op2")
+            scene.menuHandling.handleButtonPress(text: "subMenu_Op2", scene: scene)
             break
         case "subMenu_Op3":
             //Submenu button pressed
-            scene.menuHandling.handleButtonPress(text: "subMenu_Op3")
+            scene.menuHandling.handleButtonPress(text: "subMenu_Op3", scene: scene)
             break
         case "submenuBackground":
             break

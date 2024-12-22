@@ -23,7 +23,7 @@ public class GoldHandling {
         // Create an action to remove the gold drop after it reaches the player
         let removeAction = SKAction.run {
             goldNode.removeFromParent()
-            if(scene.player.playerConfiguration.showCollectedGold){
+            if(PlayerConfig.showCollectedGold){
                 self.showGoldFeedback(amount: goldNode.amount, at: playerPosition, scene: scene)
             }
             // Increase the player's gold count

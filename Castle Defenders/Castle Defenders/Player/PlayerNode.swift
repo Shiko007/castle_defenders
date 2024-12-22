@@ -8,7 +8,6 @@
 import SpriteKit
 
 class PlayerNode: SKSpriteNode {
-    let playerConfiguration = PlayerConfig()
     var experiencePoints: Int = 0
     var experienceToNextLevel: Int! // Example: XP required to reach level 2
     var level: Int = 1
@@ -16,6 +15,7 @@ class PlayerNode: SKSpriteNode {
     var attackCooldown: TimeInterval = 1 // Time between attacks initial value
     var lastAttackTime: TimeInterval = 0 // Track the last attack time
     var attackRange: CGFloat = 50 // Range within which the player can attack inital value
+    var attackDamage: Int = 10 //Attack Damage initial value
     var gold: Int = 0
     var gameScene: GameScene?
     private var rangeCircle: SKShapeNode!
@@ -26,9 +26,10 @@ class PlayerNode: SKSpriteNode {
         // You must call a designated initializer of SKSpriteNode here
         super.init(texture: texture, color: color, size: size)  // Correct designated initializer call
         self.zPosition = elementsZPos.player
-        self.attackCooldown = playerConfiguration.attackCD
-        self.attackRange = playerConfiguration.attackRange
-        self.experienceToNextLevel = playerConfiguration.playerLevelExperience
+        self.attackCooldown = PlayerConfig.attackCD
+        self.attackRange = PlayerConfig.attackRange
+        self.attackDamage = PlayerConfig.attackDamage
+        self.experienceToNextLevel = PlayerConfig.playerLevelExperience
         // Set up physics body for the player
         self.physicsBody = SKPhysicsBody(rectangleOf: self.size)
         self.physicsBody?.categoryBitMask = PhysicsCategory.player
@@ -46,17 +47,17 @@ class PlayerNode: SKSpriteNode {
     }
     
     func addPlayerRangeCircle() {
-        let radius: CGFloat = playerConfiguration.attackRange
+        let radius: CGFloat = PlayerConfig.attackRange
         
         // Create a circular shape node with the given radius
         let rangeCircle = SKShapeNode(circleOfRadius: radius)
         
         // Set the fill color to gray with low opacity
-        rangeCircle.fillColor = playerConfiguration.playerRangeColor.withAlphaComponent(playerConfiguration.playerRangeColorAlpha)
+        rangeCircle.fillColor = PlayerConfig.playerRangeColor.withAlphaComponent(PlayerConfig.playerRangeColorAlpha)
         
         // Optionally, set the stroke color and width (for the circle's border)
-        rangeCircle.strokeColor = playerConfiguration.playerRangeColor
-        rangeCircle.lineWidth = playerConfiguration.playerRangeLineW
+        rangeCircle.strokeColor = PlayerConfig.playerRangeColor
+        rangeCircle.lineWidth = PlayerConfig.playerRangeLineW
         // Position the circle at the player's position
         rangeCircle.position = self.position
         // Ensure the circle is behind the player (optional, adjust zPosition as needed)
@@ -67,12 +68,12 @@ class PlayerNode: SKSpriteNode {
     }
     
     func drawExperienceArc() {
-        let radius: CGFloat = playerConfiguration.attackRange
+        let radius: CGFloat = PlayerConfig.attackRange
         experienceArc = SKShapeNode(circleOfRadius: radius)
-        experienceArc.strokeColor = playerConfiguration.expBarLineColor
-        experienceArc.lineWidth = playerConfiguration.expBarLineWidth
+        experienceArc.strokeColor = PlayerConfig.expBarLineColor
+        experienceArc.lineWidth = PlayerConfig.expBarLineWidth
         experienceArc.position = self.position
-        experienceArc.alpha = playerConfiguration.expBarAlpha
+        experienceArc.alpha = PlayerConfig.expBarAlpha
         experienceArc.zPosition = elementsZPos.expCircle
         experienceArc.lineCap = .round // Smooth line endings
         
@@ -83,7 +84,7 @@ class PlayerNode: SKSpriteNode {
     
     // Create the arc path based on the experience percentage
     func createArcPath(percentage: CGFloat) -> CGPath {
-        let radius: CGFloat = playerConfiguration.attackRange
+        let radius: CGFloat = PlayerConfig.attackRange
         let center = CGPoint(x: 0, y: 0)
         let startAngle = CGFloat(-CGFloat.pi / 2) // Start at the top of the circle
         let endAngle = startAngle + (2 * CGFloat.pi * percentage / 100)
@@ -106,7 +107,7 @@ class PlayerNode: SKSpriteNode {
         for monster in sortedMonsters {
             distance = distanceBetween(player: self, monster: monster)
             
-            if distance <= attackRange && attackableMonsters.count <= playerConfiguration.attackCount {
+            if distance <= attackRange && attackableMonsters.count < PlayerConfig.attackCount {
                 attackableMonsters.append(monster)
             }
         }
@@ -130,14 +131,13 @@ class PlayerNode: SKSpriteNode {
     }
     
     func attack(monsters: [MonsterNode]) {
-        //TODO: Handle number of projectiles required to kill a target
-        // Attack animation (e.g., shoot an arrow)
+        // Attack animation (e.g., shoot a projectile)
         let attackImage = SKTexture(image: UIImage(systemName: "circle.fill")!)
         for monster in monsters {
-            let attack = AttackNode(texture:attackImage, targetMonster: monster, damage: playerConfiguration.attackDamage)
+            let attack = AttackNode(texture:attackImage, targetMonster: monster, damage: self.attackDamage)
             
             attack.position = self.position
-            let moveAction = SKAction.move(to: monster.position, duration: playerConfiguration.attackProjectileSpeed)
+            let moveAction = SKAction.move(to: monster.position, duration: PlayerConfig.attackProjectileSpeed)
             let removeAction = SKAction.removeFromParent()
             attack.run(SKAction.sequence([moveAction, removeAction]))
             
@@ -168,7 +168,7 @@ class PlayerNode: SKSpriteNode {
         
         // Reset XP and increase the XP threshold for the next level
         experiencePoints = 0
-        experienceToNextLevel += playerConfiguration.playerLevelExpIncrement // Increase the XP requirement (adjust as needed)
+        experienceToNextLevel += PlayerConfig.playerLevelExpIncrement // Increase the XP requirement (adjust as needed)
         //TODO: Implement a level up notification
         // Create and position the levelup effect
         if let levelupEffect = SKEmitterNode(fileNamed: "level_up.sks") {

@@ -8,14 +8,13 @@
 import GameplayKit
 
 public class PlayerHandling{
-    let playerConfiguration = PlayerConfig()
     
     func CreatePlayer(gameScene: GameScene) -> PlayerNode{
         let idleFrames = self.loadPlayerIdleSFrames()
         // Create your SKSpriteNode (your archer character)
-        let player = PlayerNode(texture: idleFrames[0],size: CGSize(width: playerConfiguration.playerWidth, height: playerConfiguration.playerHeight), gameScene: gameScene)
+        let player = PlayerNode(texture: idleFrames[0],size: CGSize(width: PlayerConfig.playerWidth, height: PlayerConfig.playerHeight), gameScene: gameScene)
         // Animate the archer with the frames at a set speed (0.1 seconds per frame)
-        player.run(SKAction.repeatForever(SKAction.animate(with: idleFrames, timePerFrame: playerConfiguration.idleSAnimationSpeed)))
+        player.run(SKAction.repeatForever(SKAction.animate(with: idleFrames, timePerFrame: PlayerConfig.idleSAnimationSpeed)))
         
         return player
     }

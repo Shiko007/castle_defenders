@@ -71,8 +71,7 @@ class MonsterNode: SKSpriteNode {
     func updateHealthBar() {
         let healthPercentage = CGFloat(health) / CGFloat(maxHealth)
         let barWidth = size.width * healthPercentage
-        healthBar.size.width = barWidth  // Adjust the width of the health bar
-        //healthBar.position = CGPoint(x: -(size.width * (1 - healthPercentage)) / 2, y: 0)
+        healthBar.size.width = barWidth 
     }
 
     func takeDamage(amount: Int) {
@@ -99,19 +98,21 @@ class MonsterNode: SKSpriteNode {
             let removeSmoke = SKAction.removeFromParent()
             smokeEffect.run(SKAction.sequence([wait, removeSmoke]))
         }
-        // Generate the gold drop at the monster's location
-        let goldDrop = GoldNode(position: self.position, minValue: 1,maxValue: 10)
-        // Add a removal after a few seconds
-        let goldWait = SKAction.wait(forDuration: 5.0)
-        let goldRemove = SKAction.removeFromParent()
         // Remove the monster from the scene
         gameScene.removeMonsterFromList(monster: self)
         gameScene.incrementMonstersKilled()
         player.gainExperience(points: expWorth)
-        gameScene.addChild(goldDrop)
-        goldDrop.run(SKAction.sequence([goldWait, goldRemove]))
-        if(playerConfiguration.autoCollectGold == true){
-            goldHandling.handleGoldCollect(player: player, goldNode: goldDrop, scene: gameScene)
+        if(Int.random(in: 0 ... PlayerConfig.goldChanceFactor) == PlayerConfig.goldChanceFactor){
+            // Generate the gold drop at the monster's location
+            let goldDrop = GoldNode(position: self.position, minValue: 1,maxValue: 5)
+            // Add a removal after a few seconds
+            let goldWait = SKAction.wait(forDuration: 5.0)
+            let goldRemove = SKAction.removeFromParent()
+            gameScene.addChild(goldDrop)
+            goldDrop.run(SKAction.sequence([goldWait, goldRemove]))
+            if(PlayerConfig.autoCollectGold == true){
+                goldHandling.handleGoldCollect(player: player, goldNode: goldDrop, scene: gameScene)
+            }
         }
         self.removeFromParent()
     }
