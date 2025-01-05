@@ -28,6 +28,7 @@ public class GoldHandling {
             }
             // Increase the player's gold count
             player.gold += goldNode.amount
+            player.savePlayerState()
             scene.uiHandling.goldCounterLabel.text = "\(player.gold)"
         }
         
@@ -66,7 +67,7 @@ public class GoldHandling {
         goldLabel.run(sequence)
     }
     
-    func createGoldLabel(view : SKView, scene : SKScene) -> SKLabelNode {
+    func createGoldLabel(view : SKView, scene : GameScene) -> SKLabelNode {
         let goldLabel = SKLabelNode(text: goldConfig.goldCounterLabel)
         
         goldLabel.fontName = goldConfig.goldLabelFont

@@ -8,6 +8,8 @@
 import SpriteKit
 
 class PlayerNode: SKSpriteNode {
+    let playerParametersStorage = PlayerParametersStorage()
+    var playerID: String?
     var experiencePoints: Int = 0
     var experienceToNextLevel: Int! // Example: XP required to reach level 2
     var level: Int = 1
@@ -26,10 +28,7 @@ class PlayerNode: SKSpriteNode {
         // You must call a designated initializer of SKSpriteNode here
         super.init(texture: texture, color: color, size: size)  // Correct designated initializer call
         self.zPosition = elementsZPos.player
-        self.attackCooldown = PlayerConfig.attackCD
-        self.attackRange = PlayerConfig.attackRange
-        self.attackDamage = PlayerConfig.attackDamage
-        self.experienceToNextLevel = PlayerConfig.playerLevelExperience
+        self.loadPlayer()
         // Set up physics body for the player
         self.physicsBody = SKPhysicsBody(rectangleOf: self.size)
         self.physicsBody?.categoryBitMask = PhysicsCategory.player
@@ -179,6 +178,44 @@ class PlayerNode: SKSpriteNode {
             let wait = SKAction.wait(forDuration: 3.0) // Adjust duration as needed
             let removeLevelUpEffect = SKAction.removeFromParent()
             levelupEffect.run(SKAction.sequence([wait, removeLevelUpEffect]))
+        }
+    }
+    
+    func loadPlayer() {
+        let defaultplayerData: [String: Any] = ["gold": self.gold]
+        self.playerID = getPlayerID()
+        self.playerParametersStorage.loadPlayerData(playerID: self.playerID!) { data in
+            if let data = data {
+                self.gold = data["gold"] as! Int
+                self.gameScene!.uiHandling.goldCounterLabel.text = "\(self.gold)"
+            }
+            else {
+                self.playerParametersStorage.savePlayerData(playerID: self.getPlayerID(), data: defaultplayerData)
+            }
+        }
+        self.attackCooldown = PlayerConfig.attackCD
+        self.attackRange = PlayerConfig.attackRange
+        self.attackDamage = PlayerConfig.attackDamage
+        self.experienceToNextLevel = PlayerConfig.playerLevelExperience
+    }
+    
+    func savePlayerState() {
+        let playerData = ["gold": self.gold]
+        self.playerParametersStorage.savePlayerData(playerID: self.getPlayerID(), data: playerData)
+    }
+    
+    func generatePlayerID() -> String {
+        return UUID().uuidString
+    }
+    
+    func getPlayerID() -> String {
+        let key = "playerID"
+        if let savedID = UserDefaults.standard.string(forKey: key) {
+            return savedID
+        } else {
+            let newID = generatePlayerID()
+            UserDefaults.standard.set(newID, forKey: key)
+            return newID
         }
     }
 }

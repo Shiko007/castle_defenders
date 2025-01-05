@@ -6,6 +6,11 @@
 	objectVersion = 77;
 	objects = {
 
+/* Begin PBXBuildFile section */
+		2E3578C82D2B26E100D2ECD2 /* FirebaseAuth in Frameworks */ = {isa = PBXBuildFile; productRef = 2E3578C72D2B26E100D2ECD2 /* FirebaseAuth */; };
+		2E3578CA2D2B26E100D2ECD2 /* FirebaseFirestore in Frameworks */ = {isa = PBXBuildFile; productRef = 2E3578C92D2B26E100D2ECD2 /* FirebaseFirestore */; };
+/* End PBXBuildFile section */
+
 /* Begin PBXFileReference section */
 		2E8CC3222CB0A27100A6B616 /* Castle Defenders.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Castle Defenders.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
@@ -23,6 +28,8 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				2E3578C82D2B26E100D2ECD2 /* FirebaseAuth in Frameworks */,
+				2E3578CA2D2B26E100D2ECD2 /* FirebaseFirestore in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -65,6 +72,8 @@
 			);
 			name = "Castle Defenders";
 			packageProductDependencies = (
+				2E3578C72D2B26E100D2ECD2 /* FirebaseAuth */,
+				2E3578C92D2B26E100D2ECD2 /* FirebaseFirestore */,
 			);
 			productName = "Castle Defenders";
 			productReference = 2E8CC3222CB0A27100A6B616 /* Castle Defenders.app */;
@@ -94,6 +103,9 @@
 			);
 			mainGroup = 2E8CC3192CB0A27100A6B616;
 			minimizedProjectReferenceProxies = 1;
+			packageReferences = (
+				2E3578C62D2B26E100D2ECD2 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */,
+			);
 			preferredProjectObjectVersion = 77;
 			productRefGroup = 2E8CC3232CB0A27100A6B616 /* Products */;
 			projectDirPath = "";
@@ -334,6 +346,30 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCRemoteSwiftPackageReference section */
+		2E3578C62D2B26E100D2ECD2 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/firebase/firebase-ios-sdk";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 11.6.0;
+			};
+		};
+/* End XCRemoteSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		2E3578C72D2B26E100D2ECD2 /* FirebaseAuth */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 2E3578C62D2B26E100D2ECD2 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
+			productName = FirebaseAuth;
+		};
+		2E3578C92D2B26E100D2ECD2 /* FirebaseFirestore */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 2E3578C62D2B26E100D2ECD2 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
+			productName = FirebaseFirestore;
+		};
+/* End XCSwiftPackageProductDependency section */
 	};
 	rootObject = 2E8CC31A2CB0A27100A6B616 /* Project object */;
 }
