@@ -19,13 +19,12 @@ public class PlayerHandling{
         return player
     }
     
-    func loadPlayerIdleSFrames() -> [SKTexture]{
-        // Create an array to hold the animation frames
-        let figureStand = UIImage(systemName: "figure.wave")!
-        let figureStand2 = UIImage(systemName: "figure.arms.open")!
-        let figureStand3 = UIImage(systemName: "figure")!
-        let idleFrames: [SKTexture] = [SKTexture(image: figureStand),SKTexture(image: figureStand2),SKTexture(image: figureStand3)]
-
+    func loadPlayerIdleSFrames() -> [SKTexture] {
+        var idleFrames: [SKTexture] = []
+        for i in 1...9 {
+            let texture = SKTexture(imageNamed: "archer_idle_\(i)")
+            idleFrames.append(texture)
+        }
         return idleFrames
     }
 }
