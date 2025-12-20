@@ -17,29 +17,34 @@ public class MonsterHandling{
     
     func CreateMonster(gameScene: GameScene,direction: Direction,player: PlayerNode) -> MonsterNode{
         let movingFrames = self.loadMonsterMovingFrames(direction: direction)
-        // Create your Monster
+        // Create your Monster with custom sprite
         let monster = MonsterNode(texture: movingFrames[0], size: CGSize(width: monsterConfiguration.monsterWidth, height: monsterConfiguration.monsterHeight), gameScene: gameScene, player: player, expWorth: monsterConfiguration.monsterExpWorth)
-        // Animate with the frames at a set speed (0.1 seconds per frame)
+        // Animate with the frames at a set speed
         monster.run(SKAction.repeatForever(SKAction.animate(with: movingFrames, timePerFrame: monsterConfiguration.monsterAnimationSpeed)))
         
         return monster
     }
     
     func loadMonsterMovingFrames(direction: Direction) -> [SKTexture]{
-        switch direction {
-        case .left:
-            let figureStand = UIImage(systemName: "figure.bowling")!
-            let figureStand2 = UIImage(systemName: "figure.basketball")!
-            let figureStand3 = UIImage(systemName: "figure")!
-            let Frames: [SKTexture] = [SKTexture(image: figureStand),SKTexture(image: figureStand2),SKTexture(image: figureStand3)]
-            return Frames
-        case .right:
-            let figureStand = UIImage(systemName: "figure.walk")!
-            let figureStand2 = UIImage(systemName: "figure.run")!
-            let figureStand3 = UIImage(systemName: "figure")!
-            let Frames: [SKTexture] = [SKTexture(image: figureStand),SKTexture(image: figureStand2),SKTexture(image: figureStand3)]
-            return Frames
+        // Randomly choose a monster type for variety
+        let monsterType = Int.random(in: 0...2)
+        
+        var monsterTexture: SKTexture
+        
+        switch monsterType {
+        case 0: // Basic monster
+            monsterTexture = SKTexture(imageNamed: "goblin_sword")
+        case 1: // Fast monster
+            monsterTexture = SKTexture(imageNamed: "wolf_grey")
+        case 2: // Tank monster
+            monsterTexture = SKTexture(imageNamed: "goblin_tank")
+        default:
+            monsterTexture = SKTexture(imageNamed: "goblin_sword")
         }
+        
+        // For now, using static sprites. Can add animation frames later
+        let frames: [SKTexture] = [monsterTexture]
+        return frames
     }
     
     func spawnMonster(gameScene: GameScene, player : PlayerNode) -> MonsterNode {

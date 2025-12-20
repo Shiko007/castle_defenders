@@ -88,8 +88,10 @@ class MonsterNode: SKSpriteNode {
     }
     
     func MonsterDestroyed(){
-        // Create and position the smoke effect
+        // Create and position the smoke effect with custom particle
         if let smokeEffect = SKEmitterNode(fileNamed: "enemy_destroyed.sks") {
+            // Use custom smoke particle texture
+            smokeEffect.particleTexture = SKTexture(imageNamed: "smoke_puff")
             smokeEffect.position = self.position
             self.parent?.addChild(smokeEffect)
             smokeEffect.zPosition = elementsZPos.monsterDestroyedEffect

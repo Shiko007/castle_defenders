@@ -10,16 +10,64 @@ import SpriteKit
 public class Common {
     let gameSceneBGColor: UIColor = .white
     
-    // Create a button with a border
+    // Create a button with icon (SF Symbol) or custom image
+    func createIconButton(iconName: String, name: String, size: CGSize, position: CGPoint) -> SKNode {
+        let buttonNode = SKNode()
+        
+        // Try to load custom button image first
+        if let customButtonImage = UIImage(named: "button") {
+            let buttonBackground = SKSpriteNode(texture: SKTexture(image: customButtonImage))
+            buttonBackground.size = size
+            buttonBackground.name = name
+            buttonNode.addChild(buttonBackground)
+        } else {
+            // Fallback to circular shape if custom image not found
+            let radius = size.width / 2
+            let buttonBackground = SKShapeNode(circleOfRadius: radius)
+            buttonBackground.fillColor = UIColor.systemBlue.withAlphaComponent(0.8)
+            buttonBackground.strokeColor = UIColor.systemBlue
+            buttonBackground.lineWidth = 3
+            buttonBackground.name = name
+            buttonNode.addChild(buttonBackground)
+        }
+        
+        // Create icon from SF Symbol
+        if let iconImage = UIImage(systemName: iconName) {
+            let icon = SKSpriteNode(texture: SKTexture(image: iconImage))
+            icon.size = CGSize(width: size.width * 0.6, height: size.height * 0.6)
+            icon.color = .white
+            icon.colorBlendFactor = 1.0
+            icon.name = name
+            icon.zPosition = 1
+            buttonNode.addChild(icon)
+        }
+        
+        // Position the button
+        buttonNode.zPosition = elementsZPos.menuButton
+        buttonNode.position = position
+        
+        return buttonNode
+    }
+    
+    // Create a button with a border (now uses custom button image!)
     func createButton(withText text: String,name: String, size: CGSize, position: CGPoint) -> SKNode {
         let buttonNode = SKNode()
         
-        // Create the background as a shape node with a border
-        let buttonBackground = SKShapeNode(rectOf: size, cornerRadius: 10)
-        buttonBackground.fillColor = .clear
-        buttonBackground.strokeColor = .gray // Border color
-        buttonBackground.lineWidth = 5 // Border thickness
-        buttonBackground.name = name
+        // Try to load custom button image first
+        if let customButtonImage = UIImage(named: "button") {
+            let buttonBackground = SKSpriteNode(texture: SKTexture(image: customButtonImage))
+            buttonBackground.size = size
+            buttonBackground.name = name
+            buttonNode.addChild(buttonBackground)
+        } else {
+            // Fallback to shape with border if custom image not found
+            let buttonBackground = SKShapeNode(rectOf: size, cornerRadius: 10)
+            buttonBackground.fillColor = .clear
+            buttonBackground.strokeColor = .gray
+            buttonBackground.lineWidth = 5
+            buttonBackground.name = name
+            buttonNode.addChild(buttonBackground)
+        }
         
         // Create the label
         let label = SKLabelNode()
@@ -27,16 +75,15 @@ public class Common {
                 string: text,
                 attributes: [
                     .font: UIFont.boldSystemFont(ofSize: 28),
-                    .foregroundColor: UIColor.gray
+                    .foregroundColor: UIColor.white  // White text for better contrast
                 ]
             )
         label.position = CGPoint(x: 0, y: -label.frame.size.height / 2)
         label.name = name
         
-        // Position the button and add background + label
+        // Position the button and add label
         buttonNode.zPosition = elementsZPos.menuButton
         buttonNode.position = position
-        buttonNode.addChild(buttonBackground)
         buttonNode.addChild(label)
         
         return buttonNode

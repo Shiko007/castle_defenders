@@ -24,7 +24,9 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     var monstersKilled: Int = 0
     
     override func sceneDidLoad() {
-        self.backgroundColor = common.gameSceneBGColor
+        // Set custom background
+        addBackground()
+        
         sceneLoaded = true
         player = playerHandler.CreatePlayer(gameScene: self)
         var monster : MonsterNode?
@@ -42,6 +44,49 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         // Add the player to the scene
         self.run(spawnForever)
         self.addChild(player!)
+    }
+    
+    // Add custom tiled background
+    private func addBackground() {
+        // Try to load custom background texture
+        if let backgroundImage = UIImage(named: "bg_tile_grass") {
+            let backgroundTexture = SKTexture(image: backgroundImage)
+            
+            // Get the actual texture size
+            let tileSize = backgroundTexture.size()
+            
+            // Calculate how many tiles we need to cover the screen
+            // Add extra tiles to cover edges since anchor is centered
+            let tilesWide = Int(ceil(self.size.width / tileSize.width)) + 2
+            let tilesHigh = Int(ceil(self.size.height / tileSize.height)) + 2
+            
+            // Create a parent node for all tiles
+            let tiledBackground = SKNode()
+            tiledBackground.zPosition = -100
+            tiledBackground.name = "background"
+            
+            // Calculate starting position (since scene anchor is at center)
+            let startX = -(CGFloat(tilesWide) * tileSize.width) / 2
+            let startY = -(CGFloat(tilesHigh) * tileSize.height) / 2
+            
+            // Create tiles to fill the screen
+            for row in 0..<tilesHigh {
+                for col in 0..<tilesWide {
+                    let tile = SKSpriteNode(texture: backgroundTexture)
+                    tile.anchorPoint = CGPoint(x: 0, y: 0)  // Bottom-left anchor for each tile
+                    tile.position = CGPoint(
+                        x: startX + (CGFloat(col) * tileSize.width),
+                        y: startY + (CGFloat(row) * tileSize.height)
+                    )
+                    tiledBackground.addChild(tile)
+                }
+            }
+            
+            self.addChild(tiledBackground)
+        } else {
+            // Fallback to colored background
+            self.backgroundColor = common.gameSceneBGColor
+        }
     }
     
     // This function gets called when a collision/contact occurs

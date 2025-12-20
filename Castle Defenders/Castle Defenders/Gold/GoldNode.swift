@@ -10,11 +10,11 @@ class GoldNode : SKSpriteNode {
     let goldConfig = GoldConfig()
     var amount: Int!
     init(position: CGPoint, minValue : Int, maxValue : Int) {
-        let goldImage = UIImage(systemName: goldConfig.goldImageSystem)!
-        let texture = SKTexture(image: goldImage)
+        // Use custom gold coin sprite
+        let goldTexture = SKTexture(imageNamed: "gold_coin")
         let size = goldConfig.goldImageSize
         amount = Int.random(in: minValue ... maxValue)
-        super.init(texture: texture, color: .clear, size: size)
+        super.init(texture: goldTexture, color: .clear, size: size)
         self.zPosition = elementsZPos.goldDrops
         self.position = position
         self.name = "goldDrop"

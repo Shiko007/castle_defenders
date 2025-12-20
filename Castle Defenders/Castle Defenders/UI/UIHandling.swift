@@ -15,8 +15,20 @@ class UIHandling {
     var shopMenu: SKNode!
     
     func showUI(scene : GameScene, view : SKView) {
-        let menuButton = scene.common.createButton(withText: "I", name: "menuButton", size: CGSize(width: 50, height: 50), position: scene.convertPoint(fromView: CGPoint(x: view.bounds.minX + 50, y: view.bounds.minY + 50)))
-        let teleportButton = scene.common.createButton(withText: "O", name: "teleportButton", size: CGSize(width: 50, height: 50), position: scene.convertPoint(fromView: CGPoint(x: view.bounds.maxX - 50, y: view.bounds.minY + 50)))
+        // Create menu buttons with better SF Symbol icons - BIGGER SIZE
+        let menuButton = scene.common.createIconButton(
+            iconName: "line.3.horizontal.circle.fill",  // Hamburger menu icon
+            name: "menuButton", 
+            size: CGSize(width: 80, height: 80),  // Increased from 60
+            position: scene.convertPoint(fromView: CGPoint(x: view.bounds.minX + 50, y: view.bounds.minY + 50))
+        )
+        
+        let teleportButton = scene.common.createIconButton(
+            iconName: "location.circle.fill",  // Location/map icon
+            name: "teleportButton", 
+            size: CGSize(width: 80, height: 80),  // Increased from 60
+            position: scene.convertPoint(fromView: CGPoint(x: view.bounds.maxX - 50, y: view.bounds.minY + 50))
+        )
         
         teleportMenu = scene.mapsHandling.CreateMapsSubmenu(view: view, scene: scene)
         subMenu = scene.menuHandling.createMenuSubmenu(view: view, scene: scene)

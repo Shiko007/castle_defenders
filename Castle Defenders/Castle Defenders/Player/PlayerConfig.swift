@@ -8,8 +8,8 @@ import SpriteKit
 
 struct PlayerConfig {
     static let idleSAnimationSpeed = 0.15
-    static let playerWidth : CGFloat = 50
-    static let playerHeight : CGFloat = 50
+    static let playerWidth : CGFloat = 150  // Increased from 50
+    static let playerHeight : CGFloat = 150  // Increased from 50
     static let playerLevelExperience : Int = 100
     static let playerLevelExpIncrement : Int = 10
     

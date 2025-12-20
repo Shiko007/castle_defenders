@@ -130,10 +130,13 @@ class PlayerNode: SKSpriteNode {
     }
     
     func attack(monsters: [MonsterNode]) {
-        // Attack animation (e.g., shoot a projectile)
-        let attackImage = SKTexture(image: UIImage(systemName: "circle.fill")!)
+        // Use custom projectile sprites - cycle through different types
+        let projectileTypes = ["arrow_wood", "orb_fire", "orb_magic"]
+        let randomProjectile = projectileTypes.randomElement() ?? "arrow_wood"
+        let attackImage = SKTexture(imageNamed: randomProjectile)
+        
         for monster in monsters {
-            let attack = AttackNode(texture:attackImage, targetMonster: monster, damage: self.attackDamage)
+            let attack = AttackNode(texture: attackImage, targetMonster: monster, damage: self.attackDamage)
             
             attack.position = self.position
             let moveAction = SKAction.move(to: monster.position, duration: PlayerConfig.attackProjectileSpeed)
@@ -169,12 +172,14 @@ class PlayerNode: SKSpriteNode {
         experiencePoints = 0
         experienceToNextLevel += PlayerConfig.playerLevelExpIncrement // Increase the XP requirement (adjust as needed)
         //TODO: Implement a level up notification
-        // Create and position the levelup effect
+        // Create and position the levelup effect with custom particle
         if let levelupEffect = SKEmitterNode(fileNamed: "level_up.sks") {
+            // Use custom magic particle texture
+            levelupEffect.particleTexture = SKTexture(imageNamed: "spark_blue")
             levelupEffect.position = self.position
             self.parent?.addChild(levelupEffect)
             
-            // Optional: Run a sequence to remove the smoke effect after it dissipates
+            // Optional: Run a sequence to remove the effect after it dissipates
             let wait = SKAction.wait(forDuration: 3.0) // Adjust duration as needed
             let removeLevelUpEffect = SKAction.removeFromParent()
             levelupEffect.run(SKAction.sequence([wait, removeLevelUpEffect]))
